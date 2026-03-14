@@ -38,7 +38,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b p-4">
+      <SidebarHeader className="border-b border-border h-14 flex items-center px-4">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg gradient-ai">
             <Bot className="h-4 w-4 text-primary-foreground" />
