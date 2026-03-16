@@ -115,7 +115,7 @@ async def get_current_user(access_token: str) -> UserOut:
 async def get_user_by_id(user_id: str) -> UserOut | None:
     """Fetch a user profile by ID."""
     admin = get_supabase_admin()
-    result = admin.table("users").select("*").eq("id", user_id).maybe_single().execute()
+    result = admin.table("users").select("*").eq("id", user_id).execute()
     if result.data:
-        return UserOut(**result.data)
+        return UserOut(**result.data[0])
     return None

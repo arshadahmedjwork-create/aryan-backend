@@ -15,9 +15,9 @@ async def list_products(business_id: str) -> list[ProductOut]:
 async def get_product(product_id: str) -> ProductOut | None:
     """Get a single product by ID."""
     admin = get_supabase_admin()
-    result = admin.table("products").select("*").eq("id", product_id).maybe_single().execute()
+    result = admin.table("products").select("*").eq("id", product_id).execute()
     if result.data:
-        return ProductOut(**result.data)
+        return ProductOut(**result.data[0])
     return None
 
 

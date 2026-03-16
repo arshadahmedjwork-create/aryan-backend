@@ -49,9 +49,13 @@ export default function LoginPage() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-lg">
         
+        <div className="mb-4 text-left">
+          <a href="/index.html" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </a>
+        </div>
         <div className="mb-8 text-center">
-          
-
           
           <h1 className="text-3xl font-bold font-display text-foreground">NexusOps AI</h1>
           <p className="mt-2 text-muted-foreground">Autonomous Business Operations Platform</p>

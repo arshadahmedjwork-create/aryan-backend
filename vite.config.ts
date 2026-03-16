@@ -18,4 +18,14 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        app: path.resolve(__dirname, 'app.html'),
+        main: path.resolve(__dirname, 'index.html'),
+        about: path.resolve(__dirname, 'about-us.html'),
+        pricing: path.resolve(__dirname, 'pricing.html'),
+      },
+    },
+  },
 }));

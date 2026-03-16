@@ -23,18 +23,18 @@ async def list_deliveries(business_id: str | None = None) -> list[DeliveryOut]:
 async def get_delivery(delivery_id: str) -> DeliveryOut | None:
     """Get a single delivery."""
     admin = get_supabase_admin()
-    result = admin.table("deliveries").select("*").eq("id", delivery_id).maybe_single().execute()
+    result = admin.table("deliveries").select("*").eq("id", delivery_id).execute()
     if result.data:
-        return DeliveryOut(**result.data)
+        return DeliveryOut(**result.data[0])
     return None
 
 
 async def get_delivery_by_order(order_id: str) -> DeliveryOut | None:
     """Get delivery for a specific order."""
     admin = get_supabase_admin()
-    result = admin.table("deliveries").select("*").eq("order_id", order_id).maybe_single().execute()
+    result = admin.table("deliveries").select("*").eq("order_id", order_id).execute()
     if result.data:
-        return DeliveryOut(**result.data)
+        return DeliveryOut(**result.data[0])
     return None
 
 

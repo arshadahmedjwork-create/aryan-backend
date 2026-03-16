@@ -50,6 +50,8 @@ export async function sendWelcomeEmail(
 
   try {
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_WELCOME_TEMPLATE_ID, {
+      name: userName,
+      email: userEmail,
       to_name: userName,
       to_email: userEmail,
       user_role: userRole,
@@ -78,6 +80,8 @@ export async function sendLoginNotification(
   try {
     const loginTime = new Date().toLocaleString();
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_LOGIN_TEMPLATE_ID, {
+      name: userName,
+      email: userEmail,
       to_name: userName,
       to_email: userEmail,
       login_time: loginTime,

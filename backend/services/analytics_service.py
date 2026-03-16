@@ -32,7 +32,6 @@ async def upsert_revenue_metric(business_id: str, date: str, total_orders: int, 
         .select("id")
         .eq("business_id", business_id)
         .eq("date", date)
-        .maybe_single()
         .execute()
     )
 
@@ -45,6 +44,6 @@ async def upsert_revenue_metric(business_id: str, date: str, total_orders: int, 
     }
 
     if existing.data:
-        admin.table("revenue_metrics").update(payload).eq("id", existing.data["id"]).execute()
+        admin.table("revenue_metrics").update(payload).eq("id", existing.data[0]["id"]).execute()
     else:
         admin.table("revenue_metrics").insert(payload).execute()

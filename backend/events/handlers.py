@@ -18,9 +18,9 @@ async def handle_delivery_delayed(data: dict):
         # Lookup business_id from order
         from database import get_supabase_admin
         admin = get_supabase_admin()
-        order = admin.table("orders").select("business_id").eq("id", data.get("order_id", "")).maybe_single().execute()
+        order = admin.table("orders").select("business_id").eq("id", data.get("order_id", "")).execute()
         if order.data:
-            business_id = order.data["business_id"]
+            business_id = order.data[0]["business_id"]
 
     if business_id:
         await create_alert(
@@ -40,10 +40,10 @@ async def handle_negative_nps(data: dict):
     if order_id:
         from database import get_supabase_admin
         admin = get_supabase_admin()
-        order = admin.table("orders").select("business_id").eq("id", order_id).maybe_single().execute()
+        order = admin.table("orders").select("business_id").eq("id", order_id).execute()
         if order.data:
             await create_alert(
-                order.data["business_id"],
+                order.data[0]["business_id"],
                 AIAlertCreate(
                     alert_type=AlertType.negative_feedback,
                     description=f"Negative NPS score ({data.get('score')}/10) received for order {order_id}",

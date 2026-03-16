@@ -24,9 +24,9 @@ async def list_orders(business_id: str | None = None, customer_id: str | None = 
         # Fetch customer name
         customer_name = ""
         if o.get("customer_id"):
-            user_result = admin.table("users").select("name").eq("id", o["customer_id"]).maybe_single().execute()
+            user_result = admin.table("users").select("name").eq("id", o["customer_id"]).execute()
             if user_result.data:
-                customer_name = user_result.data["name"]
+                customer_name = user_result.data[0]["name"]
 
         orders.append(
             OrderOut(
@@ -46,17 +46,17 @@ async def list_orders(business_id: str | None = None, customer_id: str | None = 
 async def get_order(order_id: str) -> OrderOut | None:
     """Get a single order with items."""
     admin = get_supabase_admin()
-    result = admin.table("orders").select("*").eq("id", order_id).maybe_single().execute()
+    result = admin.table("orders").select("*").eq("id", order_id).execute()
     if not result.data:
         return None
 
-    o = result.data
+    o = result.data[0]
     items = await get_order_items(order_id)
     customer_name = ""
     if o.get("customer_id"):
-        user_result = admin.table("users").select("name").eq("id", o["customer_id"]).maybe_single().execute()
+        user_result = admin.table("users").select("name").eq("id", o["customer_id"]).execute()
         if user_result.data:
-            customer_name = user_result.data["name"]
+            customer_name = user_result.data[0]["name"]
 
     return OrderOut(
         id=o["id"],
@@ -78,9 +78,9 @@ async def get_order_items(order_id: str) -> list[OrderItemOut]:
     for item in result.data:
         product_name = ""
         if item.get("product_id"):
-            prod = admin.table("products").select("name").eq("id", item["product_id"]).maybe_single().execute()
+            prod = admin.table("products").select("name").eq("id", item["product_id"]).execute()
             if prod.data:
-                product_name = prod.data["name"]
+                product_name = prod.data[0]["name"]
         items.append(
             OrderItemOut(
                 id=item.get("id"),
