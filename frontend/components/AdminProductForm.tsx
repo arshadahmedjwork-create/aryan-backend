@@ -62,7 +62,7 @@ export default function AdminProductForm({ onClose }: { onClose: () => void }) {
             <input 
               required
               type="text" 
-              className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-blue-500 transition-colors"
+              className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-primary transition-colors"
               placeholder="e.g., Master AI Chipset"
               value={formData.name}
               onChange={e => setFormData({...formData, name: e.target.value})}
@@ -76,7 +76,7 @@ export default function AdminProductForm({ onClose }: { onClose: () => void }) {
                 required
                 type="number" 
                 step="0.01"
-                className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-blue-500 transition-colors"
+                className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-primary transition-colors"
                 placeholder="499.99"
                 value={formData.price}
                 onChange={e => setFormData({...formData, price: e.target.value})}
@@ -85,7 +85,7 @@ export default function AdminProductForm({ onClose }: { onClose: () => void }) {
             <div className="space-y-2">
               <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Category</label>
               <select 
-                className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-blue-500 transition-colors appearance-none"
+                className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-primary transition-colors appearance-none"
                 value={formData.category}
                 onChange={e => setFormData({...formData, category: e.target.value})}
               >
@@ -102,7 +102,7 @@ export default function AdminProductForm({ onClose }: { onClose: () => void }) {
             <textarea 
               required
               rows={3}
-              className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-blue-500 transition-colors resize-none"
+              className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-primary transition-colors resize-none"
               placeholder="Explain why this upgrade is essential..."
               value={formData.description}
               onChange={e => setFormData({...formData, description: e.target.value})}
@@ -113,7 +113,7 @@ export default function AdminProductForm({ onClose }: { onClose: () => void }) {
             <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Image URL</label>
             <input 
               type="text" 
-              className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-blue-500 transition-colors"
+              className="w-full p-4 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-primary transition-colors"
               placeholder="https://images.unsplash.com/..."
               value={formData.image_url}
               onChange={e => setFormData({...formData, image_url: e.target.value})}
@@ -123,7 +123,7 @@ export default function AdminProductForm({ onClose }: { onClose: () => void }) {
           <button 
             type="submit"
             disabled={loading || success}
-            className={`w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-2 ${success ? 'bg-green-500 text-white' : 'bg-blue-600 text-white hover:bg-blue-700 active:scale-95 shadow-xl shadow-blue-600/20'}`}
+            className={`w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-2 ${success ? 'bg-green-500 text-white' : 'bg-primary text-primary-foreground hover:bg-opacity-90 active:scale-95 shadow-xl shadow-primary/20'}`}
           >
             {success ? <><Check /> Product Added</> : loading ? 'Adding Product...' : 'Confirm Upload'}
           </button>

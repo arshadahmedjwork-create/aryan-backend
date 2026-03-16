@@ -75,7 +75,7 @@ export default function AdminOrderManager() {
                    <div className="flex-1 space-y-2">
                      <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest pl-2">Select Delivery NPC</p>
                      <select 
-                       className="w-full bg-white/5 border border-white/10 rounded-xl p-3 outline-none focus:border-blue-500 text-sm"
+                       className="w-full bg-white/5 border border-border rounded-xl p-3 outline-none focus:border-primary text-sm"
                        onChange={(e) => assignDriver(order.id, e.target.value)}
                        defaultValue=""
                      >
@@ -85,7 +85,7 @@ export default function AdminOrderManager() {
                        ))}
                      </select>
                    </div>
-                   <button className="p-4 bg-blue-600 rounded-2xl mt-6 hover:bg-blue-700 transition-colors">
+                    <button className="p-4 bg-primary text-primary-foreground rounded-2xl mt-6 hover:bg-opacity-90 transition-colors">
                      <Truck size={20} />
                    </button>
                 </div>
@@ -103,16 +103,16 @@ export default function AdminOrderManager() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {otherOrders.map(order => (
-            <div key={order.id} className="p-6 rounded-3xl glassmorphism border border-white/5 hover:border-blue-500/30 transition-all">
+            <div key={order.id} className="p-6 rounded-3xl glassmorphism border border-border hover:border-primary/30 transition-all">
               <div className="flex justify-between items-start mb-4">
                 <h4 className="font-bold">#{order.id.slice(0,8)}</h4>
-                <div className="px-3 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold rounded-full uppercase">
+                <div className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase">
                   {order.status}
                 </div>
               </div>
               <div className="space-y-2 mb-6 text-sm text-muted-foreground">
                  <p className="flex justify-between"><span>Items:</span> <span className="text-white font-bold">{order.order_items?.length || 0}</span></p>
-                 <p className="flex justify-between"><span>Total:</span> <span className="text-blue-500 font-bold">${order.total_price.toFixed(2)}</span></p>
+                  <p className="flex justify-between"><span>Total:</span> <span className="text-primary font-bold">${order.total_price.toFixed(2)}</span></p>
               </div>
               <button 
                 onClick={() => window.location.href=`/orders/${order.id}`}

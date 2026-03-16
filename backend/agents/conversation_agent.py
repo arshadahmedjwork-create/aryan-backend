@@ -10,8 +10,8 @@ XAI_BASE_URL = os.getenv("XAI_BASE_URL", "https://openrouter.ai/api/v1")
 XAI_MODEL = os.getenv("XAI_MODEL", "meta-llama/llama-3.3-70b-instruct")
 
 SYSTEM_PROMPT = """
-You are the Conversation Agent for AutonomIQ Commerce AI.
-Your task is to extract the user's intent and relevant entities from their message.
+You are the Conversation Agent for QueryNexis.
+Your task is to extract the user's intent and relevant entities from their message concisely.
 
 Supported Intents:
 - order_status: Checking status of an order. Requires order_id.
@@ -42,7 +42,7 @@ class ConversationAgent:
                     headers={
                         "Authorization": f"Bearer {XAI_API_KEY}",
                         "HTTP-Referer": "http://localhost:3000",
-                        "X-Title": "AutonomIQ Commerce"
+                        "X-Title": "QueryNexis Intelligence"
                     },
                     json={
                         "model": XAI_MODEL,
@@ -69,8 +69,8 @@ class ConversationAgent:
 
     async def generate_response(self, user_query: str, data: Any, intent: str) -> str:
         prompt = f"""
-        You are AutonomIQ Assistant, a helpful AI character in a futuristic e-commerce setting.
-        The user asked: "{user_query}"
+        You are QueryNexis Intelligence, a sleek and professional AI system.
+        The user query: "{user_query}"
         The detected intent was: "{intent}"
         The relevant data from our systems is: {data}
         
@@ -89,7 +89,7 @@ class ConversationAgent:
                     headers={
                         "Authorization": f"Bearer {XAI_API_KEY}",
                         "HTTP-Referer": "http://localhost:3000",
-                        "X-Title": "AutonomIQ Commerce"
+                        "X-Title": "QueryNexis Intelligence"
                     },
                     json={
                         "model": XAI_MODEL,

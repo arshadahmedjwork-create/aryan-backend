@@ -13,9 +13,9 @@ export default function Navbar() {
   const cartCount = cart.reduce((acc: number, item: any) => acc + item.qty, 0);
 
   return (
-    <nav className="fixed top-0 w-full z-50 glassmorphism px-8 py-4 flex justify-between items-center border-b border-white/5">
-      <Link href="/" className="text-2xl font-bold tracking-tighter text-blue-500">
-        AutonomIQ
+    <nav className="fixed top-0 w-full z-50 glassmorphism px-8 py-4 flex justify-between items-center border-b border-border">
+      <Link href="/" className="text-2xl font-bold tracking-tighter text-primary">
+        QueryNexis
       </Link>
       
       <div className="flex gap-8 items-center text-sm font-medium">
@@ -41,9 +41,9 @@ export default function Navbar() {
           <div className="relative">
             <button 
               onClick={() => setShowProfile(!showProfile)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-input hover:bg-white/10 border border-border transition-colors"
             >
-              <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px]">
+              <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-[10px] text-primary-foreground">
                 {user.full_name?.[0] || 'U'}
               </div>
               <span className="hidden sm:inline">{user.full_name || 'User'}</span>

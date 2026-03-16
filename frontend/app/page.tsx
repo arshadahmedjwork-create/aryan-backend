@@ -16,10 +16,10 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-6xl lg:text-8xl font-black leading-none mb-6">
-              The <span className="text-blue-500">Autonomous</span><br/>Commerce.
+              Where <span className="text-primary">Queries</span><br/>Become Intelligence.
             </h1>
             <p className="text-xl text-muted-foreground mb-10 max-w-lg">
-              Experience the next generation of shopping powered by intelligent agents. Secure, lightning-fast, and proactive.
+              The next generation of agentic commerce systems. Connected, intelligent, and autonomous.
             </p>
             <div className="flex gap-4">
               <Link href="/products" className="px-8 py-4 bg-primary text-primary-foreground font-bold rounded-xl flex items-center gap-2 hover:scale-105 transition-transform">
@@ -34,16 +34,16 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            <div className="aspect-square rounded-3xl bg-blue-500/10 border border-blue-500/20 overflow-hidden glassmorphism flex items-center justify-center p-12">
-               <div className="w-full h-full rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-800 shadow-2xl flex items-center justify-center">
-                  <Zap size={120} className="text-white animate-pulse" />
+            <div className="aspect-square rounded-3xl bg-primary/10 border border-primary/20 overflow-hidden glassmorphism flex items-center justify-center p-12">
+               <div className="w-full h-full rounded-2xl bg-gradient-to-br from-primary to-secondary shadow-2xl flex items-center justify-center">
+                  <Zap size={120} className="text-primary-foreground animate-pulse" />
                </div>
                {/* Floating elements */}
                <div className="absolute top-10 right-10 glassmorphism p-4 rounded-2xl shadow-xl animate-bounce">
-                  <ShoppingCart className="text-blue-400" />
+                  <ShoppingCart className="text-primary" />
                </div>
                <div className="absolute bottom-10 left-10 glassmorphism p-4 rounded-2xl shadow-xl animate-bounce [animation-delay:0.5s]">
-                  <Truck className="text-indigo-400" />
+                  <Truck className="text-secondary" />
                </div>
             </div>
           </motion.div>
@@ -61,7 +61,7 @@ export default function HomePage() {
               whileHover={{ y: -10 }}
               className="p-8 rounded-2xl border border-white/5 bg-white/5 hover:bg-white/10 transition-colors"
             >
-              <div className="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mb-6 text-blue-500">
+              <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-6 text-primary">
                 {f.icon}
               </div>
               <h3 className="text-2xl font-bold mb-2">{f.title}</h3>

@@ -1,21 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-background: hsl(222, 47%, 11%);
-  --color-foreground: hsl(213, 27%, 84%);
-  --color-primary: hsl(210, 100%, 50%);
-  --color-primary-foreground: hsl(222, 47%, 11%);
-  --color-secondary: hsl(222, 47%, 11%);
-  --color-secondary-foreground: hsl(210, 40%, 98%);
-  --color-accent: hsl(210, 40%, 96%);
-  --color-accent-foreground: hsl(222, 47%, 11%);
-  --color-destructive: hsl(0, 84%, 60%);
-  --color-destructive-foreground: hsl(210, 40%, 98%);
-  --color-muted: hsl(222, 47%, 11%);
-  --color-muted-foreground: hsl(215, 20%, 65%);
-  --color-border: hsl(214, 32%, 91%);
-  --color-input: hsl(214, 32%, 91%);
-  --color-ring: hsl(222, 47%, 11%);
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-background: #0B0F14; /* Deep Space Black */
+  --color-foreground: #F5F7FA; /* AI White */
+  
+  --color-primary: #2F80FF; /* Electric Blue */
+  --color-primary-foreground: #F5F7FA;
+  
+  --color-secondary: #00E0FF; /* Neural Cyan */
+  --color-secondary-foreground: #0B0F14;
+  
+  --color-accent: #1F2937; /* Graphite Gray */
+  --color-accent-foreground: #F5F7FA;
+  
+  --color-muted: #1F2937;
+  --color-muted-foreground: #9CA3AF; /* Soft Gray */
+  
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-input: rgba(255, 255, 255, 0.05);
+  --color-ring: #2F80FF;
 }
 
 @layer base {
@@ -26,8 +33,21 @@
 }
 
 .glassmorphism {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(11, 15, 20, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
+input, select, textarea {
+  @apply bg-input border-border focus:ring-primary focus:border-primary transition-all duration-200 outline-none rounded-lg;
+}
+
+button.primary {
+  @apply bg-primary text-primary-foreground hover:bg-opacity-90 transition-all duration-200 font-semibold;
+}
+
+.neural-card {
+  @apply bg-accent border-border rounded-xl p-6 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300;
 }

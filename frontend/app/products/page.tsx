@@ -31,8 +31,8 @@ export default function ProductsPage() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Exclusive Collection</h1>
-            <p className="text-muted-foreground">Handpicked products just for you.</p>
+            <h1 className="text-4xl font-bold mb-2">QueryNexis Selects</h1>
+            <p className="text-muted-foreground">Actionable intelligence for your catalog.</p>
           </div>
           
           <div className="flex gap-4 w-full md:w-auto">
@@ -77,7 +77,8 @@ export default function ProductsPage() {
                 
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-bold group-hover:text-blue-400 transition-colors">{p.name}</h3>
+                    <h3 className="text-lg font-bold group-hover:text-primary
+ transition-colors">{p.name}</h3>
                     <span className="text-lg font-black">${p.price}</span>
                   </div>
                   <p className="text-sm text-muted-foreground line-clamp-1 mb-4">{p.description}</p>

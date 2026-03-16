@@ -8,7 +8,7 @@ import api from '@/lib/api';
 export default function AIChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hello! I am your AI Commerce Assistant. How can I help you today?' }
+    { role: 'assistant', content: 'Hello! I am QueryNexis Intelligence. How can I assist you today?' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ export default function AIChat() {
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-8 right-8 w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform active:scale-95 z-50 text-white"
+        className="fixed bottom-8 right-8 w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform active:scale-95 z-50 text-primary-foreground"
       >
         <MessageSquare size={24} />
       </button>
@@ -49,13 +49,13 @@ export default function AIChat() {
             className="fixed bottom-28 right-8 w-[400px] h-[600px] glassmorphism rounded-3xl shadow-2xl z-50 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="p-6 bg-blue-600 flex justify-between items-center text-white">
+            <div className="p-6 bg-primary flex justify-between items-center text-primary-foreground">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                   <Bot size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold">AutonomIQ Agent</h3>
+                  <h3 className="font-bold">QueryNexis Intelligence</h3>
                   <div className="flex items-center gap-1.5 text-[10px] opacity-80">
                     <span className="w-2 h-2 rounded-full bg-green-400"></span> Online
                   </div>
@@ -72,8 +72,8 @@ export default function AIChat() {
                 <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[80%] p-4 rounded-2xl text-sm ${
                     m.role === 'user' 
-                      ? 'bg-blue-600 text-white rounded-tr-none' 
-                      : 'bg-white/5 border border-white/10 rounded-tl-none text-white/90'
+                      ? 'bg-primary text-primary-foreground rounded-tr-none' 
+                      : 'bg-accent border border-border rounded-tl-none text-foreground'
                   }`}>
                     {m.content}
                   </div>
@@ -94,12 +94,12 @@ export default function AIChat() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                  placeholder="Ask about orders, tracking..." 
-                  className="w-full pl-4 pr-12 py-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-blue-500 transition-colors text-sm"
+                  placeholder="Inquire about orders, metrics..." 
+                  className="w-full pl-4 pr-12 py-3 bg-white/5 border border-border rounded-xl outline-none focus:border-primary transition-colors text-sm"
                 />
                 <button 
                   onClick={sendMessage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-blue-600 rounded-lg text-white"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-primary rounded-lg text-primary-foreground"
                 >
                   <Send size={16} />
                 </button>

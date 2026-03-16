@@ -42,7 +42,8 @@ export default function LoginPage() {
             <Sparkles className="text-white" size={32} />
           </div>
           <h1 className="text-4xl font-black tracking-tight mb-2">Welcome Back</h1>
-          <p className="text-muted-foreground">Log in to your AutonomIQ account</p>
+          <p className="text-muted-foreground">Log in to your QueryNexis
+ account</p>
         </div>
 
         <div className="p-10 rounded-[2.5rem] glassmorphism relative border border-white/10">

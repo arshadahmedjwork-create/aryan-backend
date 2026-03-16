@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI):
     yield
     # Shutdown logic (if any)
 
-app = FastAPI(title="AutonomIQ Commerce AI API", lifespan=lifespan)
+app = FastAPI(title="QueryNexis Commerce AI API", lifespan=lifespan)
 
 import os
 
