@@ -14,8 +14,11 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 w-full z-50 glassmorphism px-8 py-4 flex justify-between items-center border-b border-border">
-      <Link href="/" className="text-2xl font-bold tracking-tighter text-primary">
-        QueryNexis
+      <Link href="/" className="flex items-center gap-3">
+        <img src="/logo.png" alt="QueryNexis Logo" className="h-10 w-auto" />
+        <span className="text-2xl font-bold tracking-tighter text-primary">
+          QueryNexis
+        </span>
       </Link>
       
       <div className="flex gap-8 items-center text-sm font-medium">
@@ -41,12 +44,12 @@ export default function Navbar() {
           <div className="relative">
             <button 
               onClick={() => setShowProfile(!showProfile)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-input hover:bg-white/10 border border-border transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/30 transition-all shadow-lg shadow-primary/5"
             >
-              <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-[10px] text-primary-foreground">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-[12px] text-primary-foreground font-black shadow-inner">
                 {user.full_name?.[0] || 'U'}
               </div>
-              <span className="hidden sm:inline">{user.full_name || 'User'}</span>
+              <span className="hidden sm:inline font-semibold text-primary">{user.full_name || 'User'}</span>
             </button>
             
             <AnimatePresence>
@@ -57,13 +60,14 @@ export default function Navbar() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="absolute right-0 mt-2 w-48 rounded-2xl glassmorphism border border-white/10 p-2 z-50 shadow-2xl"
+                    className="absolute right-0 mt-2 w-56 rounded-2xl glassmorphism border border-primary/20 p-2 z-50 shadow-2xl overflow-hidden"
                   >
-                    <div className="px-4 py-2 border-b border-white/5 mb-2">
-                      <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Role: {user.role}</p>
+                    <div className="px-4 py-3 bg-primary/5 border-b border-primary/10 mb-2">
+                      <p className="text-[10px] text-primary uppercase tracking-[0.2em] font-black">Account Role</p>
+                      <p className="text-sm font-bold mt-1 text-foreground capitalize">{user.role}</p>
                     </div>
                     {user.role === 'admin' && (
-                      <Link href="/admin" className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl transition-colors text-blue-400 font-bold">
+                      <Link href="/admin" className="flex items-center gap-3 px-4 py-2.5 hover:bg-primary/10 rounded-xl transition-colors text-primary font-bold">
                         Admin Dashboard
                       </Link>
                     )}
