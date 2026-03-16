@@ -38,8 +38,8 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-8 relative overflow-hidden">
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/10 blur-[120px] rounded-full"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-white/[0.03] blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-white/[0.02] blur-[120px] rounded-full"></div>
 
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
@@ -47,8 +47,8 @@ export default function RegisterPage() {
         className="max-w-md w-full"
       >
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl rotate-12">
-            <Sparkles className="text-white" size={32} />
+          <div className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl rotate-12">
+            <Sparkles className="text-black" size={32} />
           </div>
           <h1 className="text-4xl font-black tracking-tight mb-2">Join QueryNexis
 </h1>
@@ -99,14 +99,14 @@ export default function RegisterPage() {
                 <button 
                   type="button"
                   onClick={() => setRole('customer')}
-                  className={`py-3 rounded-xl border text-sm font-bold transition-all ${role === 'customer' ? 'bg-blue-600 border-blue-500 text-white' : 'bg-white/5 border-white/10 text-white/60'}`}
+                  className={`py-3 rounded-xl border text-sm font-bold transition-all ${role === 'customer' ? 'bg-white border-white text-black' : 'bg-white/5 border-white/10 text-white/60'}`}
                 >
                   Customer
                 </button>
                 <button 
                   type="button"
                   onClick={() => setRole('driver')}
-                  className={`py-3 rounded-xl border text-sm font-bold transition-all ${role === 'driver' ? 'bg-blue-600 border-blue-500 text-white' : 'bg-white/5 border-white/10 text-white/60'}`}
+                  className={`py-3 rounded-xl border text-sm font-bold transition-all ${role === 'driver' ? 'bg-white border-white text-black' : 'bg-white/5 border-white/10 text-white/60'}`}
                 >
                   Driver
                 </button>
@@ -131,7 +131,7 @@ export default function RegisterPage() {
             <button 
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl shadow-xl shadow-blue-600/20 hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group disabled:opacity-50"
+              className="w-full py-4 bg-white text-black font-bold rounded-2xl shadow-xl shadow-white/5 hover:bg-neutral-200 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />
@@ -142,8 +142,8 @@ export default function RegisterPage() {
           </form>
 
           <div className="mt-6 pt-6 border-t border-white/5 text-center">
-            <p className="text-sm text-muted-foreground">
-              Already have an account? <Link href="/login" className="text-blue-500 font-bold hover:underline">Sign in</Link>
+            <p className="text-sm text-muted-foreground font-medium">
+              Already have an account? <Link href="/login" className="text-white font-black hover:underline">Sign in</Link>
             </p>
           </div>
         </div>

@@ -10,11 +10,11 @@ export default function OrderSuccessPage() {
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="max-w-lg w-full p-12 rounded-[3.5rem] glassmorphism border border-blue-500/20 text-center relative overflow-hidden"
+        className="max-w-lg w-full p-12 rounded-[3.5rem] glassmorphism border border-white/20 text-center relative overflow-hidden"
       >
-        <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-600/10 blur-3xl rounded-full" />
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 blur-3xl rounded-full" />
         
-        <div className="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-8 text-green-500">
+        <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-8 text-white border border-white/20">
           <CheckCircle size={56} />
         </div>
         
@@ -26,7 +26,7 @@ export default function OrderSuccessPage() {
         <div className="space-y-4">
           <Link 
             href="/orders" 
-            className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20"
+            className="w-full py-4 bg-white text-black font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-neutral-200 transition-all shadow-xl shadow-white/5"
           >
             Track Order <Package size={20} />
           </Link>
@@ -39,8 +39,8 @@ export default function OrderSuccessPage() {
           </Link>
         </div>
         
-        <p className="text-[10px] uppercase tracking-[0.2em] font-black text-blue-500/50 mt-12">
-          AUTONOMIQ COMMERCE AI
+        <p className="text-[10px] uppercase tracking-[0.2em] font-black text-white/20 mt-12 italic">
+          QueryNexis Architecture
         </p>
       </motion.div>
     </div>

@@ -62,7 +62,7 @@ export default function OrderTrackingPage() {
                 <h1 className="text-4xl font-bold mb-2">Tracking</h1>
                 <p className="text-muted-foreground uppercase tracking-widest text-xs font-bold">Order ID: {id}</p>
               </div>
-              <div className="px-4 py-2 bg-blue-500/10 rounded-full text-blue-500 font-bold border border-blue-500/20">
+              <div className="px-4 py-2 bg-white/10 rounded-full text-white font-bold border border-white/20">
                 {order.status.toUpperCase()}
               </div>
             </header>
@@ -72,9 +72,9 @@ export default function OrderTrackingPage() {
               {steps.map((step, i) => (
                 <div key={i} className="flex gap-6 relative">
                   {i < steps.length - 1 && (
-                    <div className={`absolute left-4 top-10 w-0.5 h-10 ${step.done ? 'bg-blue-500' : 'bg-white/10'}`} />
+                    <div className={`absolute left-4 top-10 w-0.5 h-10 ${step.done ? 'bg-white' : 'bg-white/10'}`} />
                   )}
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 z-10 ${step.done ? 'bg-blue-600 text-white' : step.active ? 'bg-blue-500/20 text-blue-500 border border-blue-500' : 'bg-white/5 text-white/20'}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 z-10 ${step.done ? 'bg-white text-black' : step.active ? 'bg-white/10 text-white border border-white' : 'bg-white/5 text-white/20'}`}>
                     {step.done ? <CheckCircle size={16} /> : <div className="w-2 h-2 rounded-full bg-current" />}
                   </div>
                   <div>
@@ -87,7 +87,7 @@ export default function OrderTrackingPage() {
 
             {/* Delivery Map / Info */}
             {delivery && (
-              <div className="p-8 rounded-[2.5rem] bg-blue-600 text-white shadow-2xl shadow-blue-600/20 relative overflow-hidden">
+              <div className="p-8 rounded-[2.5rem] bg-white text-black shadow-2xl shadow-white/5 relative overflow-hidden">
                 <Truck className="absolute -bottom-4 -right-4 w-32 h-32 opacity-10" />
                 <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
                   <Truck /> Real-time Delivery Status
@@ -119,7 +119,7 @@ export default function OrderTrackingPage() {
                      <span className="font-bold">${item.price_at_purchase.toFixed(2)}</span>
                    </div>
                 ))}
-                <div className="border-t border-white/10 pt-4 flex justify-between font-black text-xl text-blue-500">
+                <div className="border-t border-white/10 pt-4 flex justify-between font-black text-xl text-white">
                   <span>Total</span>
                   <span>${order.total_price.toFixed(2)}</span>
                 </div>

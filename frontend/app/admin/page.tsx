@@ -65,7 +65,7 @@ export default function AdminDashboard() {
                 <h2 className="text-2xl font-bold">Product Catalog</h2>
                 <button 
                   onClick={() => setShowProductForm(true)}
-                  className="px-6 py-3 bg-white text-black font-bold rounded-2xl flex items-center gap-2 hover:bg-primary hover:text-primary-foreground transition-all shadow-xl shadow-white/5"
+                  className="px-6 py-3 bg-white text-black font-bold rounded-2xl flex items-center gap-2 hover:bg-neutral-200 transition-all shadow-xl shadow-white/5"
                 >
                   <Plus size={20} /> Add Product
                 </button>

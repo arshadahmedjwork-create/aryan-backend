@@ -5,39 +5,36 @@
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  --color-background: #0B0F14; /* Deep Space Black */
-  --color-foreground: #F5F7FA; /* AI White */
-  
-  --color-primary: #2F80FF; /* Electric Blue */
-  --color-primary-foreground: #F5F7FA;
-  
-  --color-secondary: #00E0FF; /* Neural Cyan */
-  --color-secondary-foreground: #0B0F14;
-  
-  --color-accent: #1F2937; /* Graphite Gray */
-  --color-accent-foreground: #F5F7FA;
-  
-  --color-muted: #1F2937;
-  --color-muted-foreground: #9CA3AF; /* Soft Gray */
-  
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-input: rgba(255, 255, 255, 0.05);
-  --color-ring: #2F80FF;
+  --color-background: #000000;
+  --color-foreground: #FFFFFF;
+  --color-primary: #FFFFFF;
+  --color-primary-foreground: #000000;
+  --color-secondary: #111111;
+  --color-secondary-foreground: #FFFFFF;
+  --color-muted: #111111;
+  --color-muted-foreground: #A1A1AA;
+  --color-accent: #FFFFFF;
+  --color-accent-foreground: #000000;
+  --color-destructive: #FF0000;
+  --color-destructive-foreground: #FFFFFF;
+  --color-border: #27272A;
+  --color-input: #000000;
+  --color-ring: #FFFFFF;
+  --color-radius: 1.5rem;
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans selection:bg-white selection:text-black;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
 .glassmorphism {
-  background: rgba(11, 15, 20, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  @apply bg-white/[0.02] backdrop-blur-2xl border border-white/[0.05];
 }
 
 input, select, textarea {

@@ -41,7 +41,7 @@ export default function ProductsPage() {
               <input 
                 type="text" 
                 placeholder="Search items..." 
-                className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:border-blue-500 outline-none transition-colors" 
+                className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:border-white outline-none transition-colors" 
               />
             </div>
             <button className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10">
@@ -71,21 +71,20 @@ export default function ProductsPage() {
                   {p.image_url ? (
                     <img src={p.image_url} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   ) : (
-                    <div className="text-blue-500/20 font-black text-6xl uppercase">{p.name[0]}</div>
+                    <div className="text-white/5 font-black text-6xl uppercase">{p.name[0]}</div>
                   )}
                 </div>
                 
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-bold group-hover:text-primary
- transition-colors">{p.name}</h3>
+                    <h3 className="text-lg font-bold group-hover:text-white transition-colors">{p.name}</h3>
                     <span className="text-lg font-black">${p.price}</span>
                   </div>
                   <p className="text-sm text-muted-foreground line-clamp-1 mb-4">{p.description}</p>
                   
                   <button 
                     onClick={() => addToCart(p)}
-                    className="w-full py-3 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-blue-500 hover:text-white transition-all transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+                    className="w-full py-3 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-neutral-100 transition-all transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
                   >
                     <Plus size={18} /> Add to Cart
                   </button>

@@ -123,7 +123,7 @@ export default function AdminProductForm({ onClose }: { onClose: () => void }) {
           <button 
             type="submit"
             disabled={loading || success}
-            className={`w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-2 ${success ? 'bg-green-500 text-white' : 'bg-primary text-primary-foreground hover:bg-opacity-90 active:scale-95 shadow-xl shadow-primary/20'}`}
+            className={`w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-2 ${success ? 'bg-white text-black' : 'bg-white text-black hover:bg-neutral-200 active:scale-95 shadow-xl shadow-white/5'}`}
           >
             {success ? <><Check /> Product Added</> : loading ? 'Adding Product...' : 'Confirm Upload'}
           </button>

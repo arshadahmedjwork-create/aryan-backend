@@ -61,9 +61,9 @@ export default function DriverDashboard() {
             <h1 className="text-4xl font-bold mb-2">Driver Hub</h1>
             <p className="text-muted-foreground uppercase tracking-widest text-[10px] font-bold">Autonomous Deployment Unit: {user.full_name}</p>
           </div>
-          <div className="flex items-center gap-3 px-6 py-3 bg-green-500/10 border border-green-500/20 rounded-2xl">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-xs font-bold text-green-500 uppercase tracking-widest">Active Status</span>
+          <div className="flex items-center gap-3 px-6 py-3 bg-white/10 border border-white/20 rounded-2xl shadow-lg shadow-white/5">
+            <div className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+            <span className="text-xs font-black text-white uppercase tracking-widest">Deployment Active</span>
           </div>
         </header>
 
@@ -71,7 +71,7 @@ export default function DriverDashboard() {
           {/* Active Tasks */}
           <div className="lg:col-span-2 space-y-8">
             <h2 className="text-2xl font-bold flex items-center gap-3">
-              <Navigation className="text-blue-500" /> Current Missions
+              <Navigation className="text-white" /> Current Missions
             </h2>
 
             {activeDeliveries.length === 0 ? (
@@ -95,7 +95,7 @@ export default function DriverDashboard() {
                     <div className="flex justify-between items-start mb-8 relative z-10">
                       <div>
                         <h3 className="text-2xl font-bold mb-1">Order #{delivery.order_id.slice(0, 8)}</h3>
-                        <p className="text-xs font-bold text-blue-400 uppercase tracking-widest">Status: {delivery.status}</p>
+                        <p className="text-xs font-black text-white/40 uppercase tracking-[0.2em]">Protocol: {delivery.status}</p>
                       </div>
                       <button 
                         onClick={() => window.location.href=`/orders/${delivery.order_id}`}
@@ -131,7 +131,7 @@ export default function DriverDashboard() {
                           {delivery.status === 'preparing' && (
                             <button 
                               onClick={() => updateStatus(delivery.id, 'out_for_delivery')}
-                              className="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-xl shadow-blue-600/20 active:scale-95 transition-all"
+                              className="w-full py-4 bg-white text-black hover:bg-neutral-200 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-xl shadow-white/5 active:scale-95 transition-all"
                             >
                               Commence Delivery
                             </button>
@@ -139,7 +139,7 @@ export default function DriverDashboard() {
                           {delivery.status === 'out_for_delivery' && (
                             <button 
                               onClick={() => updateStatus(delivery.id, 'delivered')}
-                              className="w-full py-4 bg-green-600 hover:bg-green-700 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-xl shadow-green-600/20 active:scale-95 transition-all"
+                              className="w-full py-4 bg-white text-black hover:bg-neutral-200 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-xl shadow-white/10 active:scale-95 transition-all"
                             >
                               Mark Delivered
                             </button>
@@ -156,7 +156,7 @@ export default function DriverDashboard() {
           <div className="space-y-8">
              <div className="p-8 rounded-[3rem] glassmorphism border border-white/5">
                 <h3 className="text-xl font-bold mb-8 flex items-center gap-3">
-                  <BarChart3 className="text-blue-500" /> Metrics
+                  <BarChart3 className="text-white" /> Metrics
                 </h3>
                 <div className="space-y-6">
                    <div className="p-4 bg-white/5 rounded-2xl">
@@ -172,13 +172,13 @@ export default function DriverDashboard() {
 
              <div className="p-8 rounded-[3rem] glassmorphism border border-white/5">
                 <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
-                  <CheckCircle className="text-green-500" /> Recent History
+                  <CheckCircle className="text-white" /> Recent History
                 </h3>
                 <div className="space-y-4">
                    {completedDeliveries.slice(0, 5).map(delivery => (
                      <div key={delivery.id} className="p-4 bg-white/5 rounded-2xl flex justify-between items-center">
                         <span className="text-xs font-bold text-muted-foreground">#{delivery.order_id.slice(0,8)}</span>
-                        <span className="text-[10px] font-black uppercase text-green-400">SUCCESS</span>
+                        <span className="text-[10px] font-black uppercase text-white/50 tracking-widest leading-none">Complete</span>
                      </div>
                    ))}
                    {completedDeliveries.length === 0 && (

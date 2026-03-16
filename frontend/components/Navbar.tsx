@@ -14,25 +14,22 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 w-full z-50 glassmorphism px-8 py-4 flex justify-between items-center border-b border-border">
-      <Link href="/" className="flex items-center gap-3">
-        <img src="/logo.png" alt="QueryNexis Logo" className="h-10 w-auto" />
-        <span className="text-2xl font-bold tracking-tighter text-primary">
-          QueryNexis
-        </span>
+      <Link href="/" className="flex items-center">
+        <img src="/logo.png" alt="QueryNexis" className="h-10 w-auto" />
       </Link>
       
       <div className="flex gap-8 items-center text-sm font-medium">
         <Link href="/products" className="hover:text-primary transition-colors hidden md:block">Shop</Link>
         
         <Link href="/cart" className="relative group">
-          <ShoppingCart size={20} className="group-hover:text-blue-400 transition-colors" />
+          <ShoppingCart size={20} className="group-hover:text-white transition-colors" />
           <AnimatePresence>
             {cartCount > 0 && (
               <motion.span 
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0 }}
-                className="absolute -top-2 -right-2 bg-blue-600 text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold"
+                className="absolute -top-2 -right-2 bg-white text-black text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-black"
               >
                 {cartCount}
               </motion.span>
@@ -75,7 +72,7 @@ export default function Navbar() {
                       My Orders
                     </Link>
                     {user.role === 'driver' && (
-                      <Link href="/driver" className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl transition-colors text-green-400 font-bold">
+                      <Link href="/driver" className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl transition-colors text-white font-bold italic">
                         Driver Hub
                       </Link>
                     )}

@@ -49,15 +49,15 @@ export default function AIChat() {
             className="fixed bottom-28 right-8 w-[400px] h-[600px] glassmorphism rounded-3xl shadow-2xl z-50 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="p-6 bg-primary flex justify-between items-center text-primary-foreground">
+            <div className="p-6 bg-white flex justify-between items-center text-black">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center">
                   <Bot size={20} />
                 </div>
                 <div>
                   <h3 className="font-bold">QueryNexis Intelligence</h3>
-                  <div className="flex items-center gap-1.5 text-[10px] opacity-80">
-                    <span className="w-2 h-2 rounded-full bg-green-400"></span> Online
+                  <div className="flex items-center gap-1.5 text-[10px] opacity-80 font-black uppercase tracking-widest">
+                    <span className="w-2 h-2 rounded-full bg-foreground shadow-[0_0_8px_rgba(255,255,255,0.5)]"></span> Active
                   </div>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export default function AIChat() {
                 />
                 <button 
                   onClick={sendMessage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-primary rounded-lg text-primary-foreground"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white rounded-lg text-black hover:bg-neutral-200 transition-colors"
                 >
                   <Send size={16} />
                 </button>

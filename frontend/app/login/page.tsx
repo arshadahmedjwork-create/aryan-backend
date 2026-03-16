@@ -29,8 +29,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-8 relative overflow-hidden">
       {/* Background Orbs */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/10 blur-[120px] rounded-full"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-white/[0.03] blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-white/[0.02] blur-[120px] rounded-full"></div>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -38,8 +38,8 @@ export default function LoginPage() {
         className="max-w-md w-full"
       >
         <div className="text-center mb-10">
-          <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-blue-600/20 rotate-12">
-            <Sparkles className="text-white" size={32} />
+          <div className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-white/10 rotate-12">
+            <Sparkles className="text-black" size={32} />
           </div>
           <h1 className="text-4xl font-black tracking-tight mb-2">Welcome Back</h1>
           <p className="text-muted-foreground">Log in to your QueryNexis
@@ -87,7 +87,7 @@ export default function LoginPage() {
             <button 
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl shadow-xl shadow-blue-600/20 hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:hover:scale-100"
+              className="w-full py-4 bg-white text-black font-bold rounded-2xl shadow-xl shadow-white/5 hover:bg-neutral-200 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:hover:scale-100"
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />
@@ -98,8 +98,8 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-8 pt-8 border-t border-white/5 text-center">
-            <p className="text-sm text-muted-foreground">
-              Don't have an account? <Link href="/register" className="text-blue-500 font-bold hover:underline">Sign up</Link>
+            <p className="text-sm text-muted-foreground font-medium">
+              Don't have an account? <Link href="/register" className="text-white font-black hover:underline">Sign up</Link>
             </p>
           </div>
         </div>

@@ -14,7 +14,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-background pt-32 px-8 pb-20">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-4 mb-12">
-          <div className="p-4 bg-blue-600/10 rounded-2xl text-blue-500">
+          <div className="p-4 bg-white/10 rounded-2xl text-white border border-white/10">
             <ShoppingBag size={32} />
           </div>
           <div>
@@ -35,7 +35,7 @@ export default function CartPage() {
                   transition={{ delay: i * 0.1 }}
                   className="p-6 rounded-3xl glassmorphism flex gap-6 items-center group"
                 >
-                  <div className="w-20 h-20 rounded-2xl bg-white/5 flex items-center justify-center text-2xl font-black text-blue-500/20 overflow-hidden">
+                  <div className="w-20 h-20 rounded-2xl bg-white/5 flex items-center justify-center text-2xl font-black text-white/10 overflow-hidden border border-white/5">
                      {item.image_url ? (
                        <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
                      ) : (
@@ -45,13 +45,13 @@ export default function CartPage() {
                   
                   <div className="flex-1">
                     <h3 className="font-bold text-lg">{item.name}</h3>
-                    <p className="text-blue-500 font-black">${item.price}</p>
+                    <p className="text-white font-black">${item.price}</p>
                   </div>
 
-                  <div className="flex items-center gap-4 bg-white/5 rounded-xl p-1 px-3">
-                    <button onClick={() => updateQty(item.id, item.qty - 1)} className="p-1 hover:text-blue-400 cursor-pointer"><Minus size={16} /></button>
+                  <div className="flex items-center gap-4 bg-white/5 rounded-xl p-1 px-3 border border-white/10">
+                    <button onClick={() => updateQty(item.id, item.qty - 1)} className="p-1 hover:text-white cursor-pointer"><Minus size={16} /></button>
                     <span className="font-bold text-sm w-4 text-center">{item.qty}</span>
-                    <button onClick={() => updateQty(item.id, item.qty + 1)} className="p-1 hover:text-blue-400 cursor-pointer"><Plus size={16} /></button>
+                    <button onClick={() => updateQty(item.id, item.qty + 1)} className="p-1 hover:text-white cursor-pointer"><Plus size={16} /></button>
                   </div>
 
                   <button onClick={() => removeFromCart(item.id)} className="p-2 text-white/20 hover:text-red-400 transition-colors cursor-pointer">
@@ -63,16 +63,16 @@ export default function CartPage() {
 
             {cart.length === 0 && (
               <div className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
-                <ShoppingBag className="mx-auto mb-4 opacity-20" size={64} />
+                <ShoppingBag className="mx-auto mb-4 opacity-10" size={64} />
                 <p className="text-muted-foreground">Your cart is currently empty.</p>
-                <Link href="/products" className="text-blue-500 font-bold mt-4 inline-block hover:underline">Start Shopping</Link>
+                <Link href="/products" className="text-white font-bold mt-4 inline-block hover:underline">Start Shopping</Link>
               </div>
             )}
           </div>
 
           <div className="space-y-6">
-            <div className="p-8 rounded-[2.5rem] glassmorphism border border-blue-500/20 relative overflow-hidden sticky top-32">
-              <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-600/10 blur-3xl rounded-full"></div>
+            <div className="p-8 rounded-[2.5rem] glassmorphism border border-white/10 relative overflow-hidden sticky top-32">
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 blur-3xl rounded-full"></div>
               
               <h3 className="text-xl font-bold mb-8">Summary</h3>
               
@@ -87,13 +87,13 @@ export default function CartPage() {
                 </div>
                 <div className="pt-4 border-t border-white/10 flex justify-between text-2xl font-black">
                   <span>Total</span>
-                  <span className="text-blue-500">${total.toFixed(2)}</span>
+                  <span className="text-white">${total.toFixed(2)}</span>
                 </div>
               </div>
 
               <Link 
                 href={cart.length > 0 ? "/checkout" : "#"}
-                className={`w-full py-4 bg-blue-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-600/20 ${cart.length === 0 && 'opacity-50 cursor-not-allowed'}`}
+                className={`w-full py-4 bg-white text-black font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-neutral-200 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 ${cart.length === 0 && 'opacity-50 cursor-not-allowed'}`}
               >
                 Checkout <Zap size={18} fill="currentColor" />
               </Link>

@@ -23,9 +23,9 @@ export default function OrderHistoryPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'delivered': return <CheckCircle className="text-green-500" size={18} />;
-      case 'shipped': return <Truck className="text-blue-500" size={18} />;
-      default: return <Clock className="text-yellow-500" size={18} />;
+      case 'delivered': return <CheckCircle className="text-white" size={18} />;
+      case 'shipped': return <Truck className="text-white" size={18} />;
+      default: return <Clock className="text-muted-foreground" size={18} />;
     }
   };
 
@@ -49,7 +49,7 @@ export default function OrderHistoryPage() {
         ) : orders.length === 0 ? (
           <div className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
             <p className="text-muted-foreground">You haven't placed any orders yet.</p>
-            <Link href="/products" className="text-blue-500 font-bold mt-4 inline-block hover:underline">Browse Products</Link>
+            <Link href="/products" className="text-white font-bold mt-4 inline-block hover:underline">Browse Products</Link>
           </div>
         ) : (
           <div className="space-y-4">
@@ -62,11 +62,11 @@ export default function OrderHistoryPage() {
               >
                 <Link 
                   href={`/orders/${order.id}`}
-                  className="p-6 rounded-3xl glassmorphism border border-white/5 flex items-center justify-between hover:border-blue-500/50 transition-all group"
+                  className="p-6 rounded-3xl glassmorphism border border-white/5 flex items-center justify-between hover:border-white/30 transition-all group"
                 >
                   <div className="flex gap-6 items-center">
                     <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center">
-                      <Package className="text-muted-foreground group-hover:text-blue-500 transition-colors" size={24} />
+                      <Package className="text-muted-foreground group-hover:text-white transition-colors" size={24} />
                     </div>
                     <div>
                       <h3 className="font-bold text-lg">Order #{order.id.slice(0, 8)}</h3>
@@ -82,7 +82,7 @@ export default function OrderHistoryPage() {
                   <div className="flex items-center gap-8">
                     <div className="text-right hidden sm:block">
                       <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Total</p>
-                      <p className="text-lg font-black text-blue-500">${order.total_price.toFixed(2)}</p>
+                      <p className="text-lg font-black text-white">${order.total_price.toFixed(2)}</p>
                     </div>
                     <ChevronRight className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
                   </div>
