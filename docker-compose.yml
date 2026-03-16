@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../infrastructure/docker/Backend.Dockerfile
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    networks:
+      - autonomiq-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../infrastructure/docker/Frontend.Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    networks:
+      - autonomiq-network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - autonomiq-network
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: ../infrastructure/docker/Backend.Dockerfile
+    command: python -m utils.worker
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    networks:
+      - autonomiq-network
+
+networks:
+  autonomiq-network:
+    driver: bridge

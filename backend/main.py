@@ -1,94 +1,74 @@
-"""
-FastAPI Application — main entry point.
-Autonomous Agentic AI Business Operations Platform.
-"""
-import asyncio
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from config import get_settings
-from events.handlers import register_handlers
-from routers import auth, products, orders, deliveries, analytics, nps, alerts, chat
-
+from routes import auth_routes, product_routes, order_routes, delivery_routes
+from database.db import init_db, get_supabase
+from agents.orchestrator import OrchestratorAgent
+from agents.conversation_agent import ConversationAgent
+from routes.auth_routes import get_current_user
+from pydantic import BaseModel
+from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan — startup and shutdown."""
-    settings = get_settings()
-
-    # Register event handlers
-    register_handlers()
-    print("[App] Event handlers registered")
-
-    # Seed database with demo data
-    try:
-        from seed import seed_database
-        seed_database()
-    except Exception as e:
-        print(f"[App] Seed skipped or failed: {e}")
-
-    # Start simulation if enabled
-    sim_task = None
-    if settings.ENABLE_SIMULATION:
-        from services.simulation_service import initialize, simulation_loop
-        try:
-            await initialize("b1")  # Default business
-            sim_task = asyncio.create_task(simulation_loop())
-            print("[App] Simulation loop started")
-        except Exception as e:
-            print(f"[App] Simulation init failed: {e}")
-
+    # Startup logic
+    init_db()
     yield
+    # Shutdown logic (if any)
 
-    # Shutdown
-    if sim_task:
-        sim_task.cancel()
-        print("[App] Simulation loop stopped")
+app = FastAPI(title="AutonomIQ Commerce AI API", lifespan=lifespan)
 
+import os
 
-# ── Create App ─────────────────────────────────────────────────────────────
+allowed_origins = [
+    "http://localhost:3000",
+    os.getenv("FRONTEND_URL", "")
+]
 
-app = FastAPI(
-    title="AI Business Operations Platform",
-    description="Autonomous Agentic AI Backend for Commerce Operations",
-    version="1.0.0",
-    lifespan=lifespan,
-)
-
-# ── CORS Middleware ────────────────────────────────────────────────────────
-
-settings = get_settings()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=[origin for origin in allowed_origins if origin],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ── Include Routers ────────────────────────────────────────────────────────
+# Include Routers
+app.include_router(auth_routes.router)
+app.include_router(product_routes.router)
+app.include_router(order_routes.router)
+app.include_router(delivery_routes.router)
 
-app.include_router(auth.router)
-app.include_router(products.router)
-app.include_router(orders.router)
-app.include_router(deliveries.router)
-app.include_router(analytics.router)
-app.include_router(nps.router)
-app.include_router(alerts.router)
-app.include_router(chat.router)
+class ChatRequest(BaseModel):
+    message: str
 
+@app.post("/chat")
+async def chat(request: ChatRequest, current_user = Depends(get_current_user), supabase = Depends(get_supabase)):
+    conv_agent = ConversationAgent()
+    orchestrator = OrchestratorAgent(supabase)
+    
+    # 1. Extract Intent
+    analysis = await conv_agent.analyze_query(request.message)
+    intent = analysis.get("intent", "general_query")
+    
+    # 2. Log Message
+    supabase.table("messages").insert({
+        "user_id": str(current_user.id),
+        "role": "user",
+        "content": request.message
+    }).execute()
+    
+    # 3. Handle via Orchestrator
+    response_text = await orchestrator.handle_request(request.message, intent, str(current_user.id))
+    
+    # 4. Log AI Response
+    supabase.table("messages").insert({
+        "user_id": str(current_user.id),
+        "role": "assistant",
+        "content": response_text
+    }).execute()
+    
+    return {"response": response_text, "intent": intent}
 
-# ── Health Check ───────────────────────────────────────────────────────────
-
-@app.get("/", tags=["Health"])
-async def health():
-    return {
-        "status": "healthy",
-        "service": "AI Business Operations Platform",
-        "version": "1.0.0",
-    }
-
-
-@app.get("/health", tags=["Health"])
-async def health_check():
-    return {"status": "ok"}
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

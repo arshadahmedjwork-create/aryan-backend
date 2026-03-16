@@ -1,0 +1,129 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+import { Truck, CheckCircle, Clock, ChevronRight, User } from 'lucide-react';
+import api from '@/lib/api';
+import { motion, AnimatePresence } from 'framer-motion';
+
+export default function AdminOrderManager() {
+  const [orders, setOrders] = useState<any[]>([]);
+  const [drivers, setDrivers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [ordersRes, driversRes] = await Promise.all([
+          api.get('/orders/'),
+          api.get('/auth/drivers') // Need to add this endpoint or similar filtering
+        ]);
+        setOrders(ordersRes.data);
+        setDrivers(driversRes.data || [
+           { id: '00000000-0000-0000-0000-000000000003', full_name: 'Autonomous Bot v2' }
+        ]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const assignDriver = async (orderId: string, driverId: string) => {
+    try {
+      await api.post(`/delivery/assign/${orderId}?driver_id=${driverId}`);
+      // Refresh orders
+      const res = await api.get('/orders/');
+      setOrders(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const pendingOrders = orders.filter(o => o.status === 'pending');
+  const otherOrders = orders.filter(o => o.status !== 'pending');
+
+  return (
+    <div className="space-y-12">
+      {/* Pending Orders - Call to Action */}
+      <div className="space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
+          <h2 className="text-2xl font-bold text-yellow-500/80">Awaiting Bot Assignment</h2>
+        </div>
+
+        {pendingOrders.length === 0 ? (
+          <div className="p-12 text-center bg-white/2 rounded-[2.5rem] border border-dashed border-white/5 text-muted-foreground">
+            No pending orders at the moment.
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {pendingOrders.map(order => (
+              <div key={order.id} className="p-8 rounded-[2.5rem] glassmorphism border border-yellow-500/20 flex flex-wrap items-center justify-between gap-8 group">
+                <div className="flex gap-6 items-center">
+                  <div className="p-4 bg-yellow-500/10 rounded-2xl text-yellow-500">
+                    <Clock size={24} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-xl">Order #{order.id.slice(0, 8)}</h3>
+                    <p className="text-muted-foreground text-sm">${order.total_price.toFixed(2)} • {new Date(order.created_at).toLocaleTimeString()}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 flex-1 max-w-md">
+                   <div className="flex-1 space-y-2">
+                     <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest pl-2">Select Delivery NPC</p>
+                     <select 
+                       className="w-full bg-white/5 border border-white/10 rounded-xl p-3 outline-none focus:border-blue-500 text-sm"
+                       onChange={(e) => assignDriver(order.id, e.target.value)}
+                       defaultValue=""
+                     >
+                       <option value="" disabled>Choose a driver...</option>
+                       {drivers.map(d => (
+                         <option key={d.id} value={d.id}>{d.full_name}</option>
+                       ))}
+                     </select>
+                   </div>
+                   <button className="p-4 bg-blue-600 rounded-2xl mt-6 hover:bg-blue-700 transition-colors">
+                     <Truck size={20} />
+                   </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Processed Orders */}
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold flex items-center gap-3">
+          <CheckCircle className="text-green-500" size={24} /> 
+          In-transit & Completed
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {otherOrders.map(order => (
+            <div key={order.id} className="p-6 rounded-3xl glassmorphism border border-white/5 hover:border-blue-500/30 transition-all">
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="font-bold">#{order.id.slice(0,8)}</h4>
+                <div className="px-3 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold rounded-full uppercase">
+                  {order.status}
+                </div>
+              </div>
+              <div className="space-y-2 mb-6 text-sm text-muted-foreground">
+                 <p className="flex justify-between"><span>Items:</span> <span className="text-white font-bold">{order.order_items?.length || 0}</span></p>
+                 <p className="flex justify-between"><span>Total:</span> <span className="text-blue-500 font-bold">${order.total_price.toFixed(2)}</span></p>
+              </div>
+              <button 
+                onClick={() => window.location.href=`/orders/${order.id}`}
+                className="w-full py-3 bg-white/5 hover:bg-white/10 rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-2"
+              >
+                Track Live <ChevronRight size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
