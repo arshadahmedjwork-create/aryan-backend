@@ -31,6 +31,12 @@ class OrchestratorAgent:
                         response = f"I couldn't find any orders starting with {order_id}. Could you double-check the ID?"
                 else: # Full UUID
                     data = await self.delivery_agent.get_raw_status(order_id)
+                    # Pass context about live tracking if available
+                    if data and data.get("deliveries"):
+                        tracking = data["deliveries"][0]
+                        if tracking.get("current_lat") and tracking.get("current_lng"):
+                            metadata["live_coordinates"] = {"lat": tracking["current_lat"], "lng": tracking["current_lng"]}
+                    
                     response = await self.conv_agent.generate_response(user_query, data, intent)
             else:
                 # Proactive lookup: find recent order
