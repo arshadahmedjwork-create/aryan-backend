@@ -11,16 +11,16 @@ class RevenueAnalyticsAgent:
         
         res = self.supabase.table("orders").select("total_price").eq("payment_status", "completed").gte("created_at", today).execute()
         
-        daily_total = sum(o["total_price"] for o in res.data)
+        daily_total = float(sum(o["total_price"] for o in res.data))
         
         # Weekly summary (last 7 days)
         last_week = (datetime.utcnow() - timedelta(days=7)).date().isoformat()
         res_week = self.supabase.table("orders").select("total_price").eq("payment_status", "completed").gte("created_at", last_week).execute()
         
-        weekly_total = sum(o["total_price"] for o in res_week.data)
+        weekly_total = float(sum(o["total_price"] for o in res_week.data))
         
         return {
             "daily_revenue": daily_total,
             "weekly_total": weekly_total,
-            "orders_count": len(res.data)
+            "orders_count": int(len(res.data))
         }

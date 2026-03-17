@@ -97,15 +97,18 @@ class OrchestratorAgent:
         else:
             response = await self.conv_agent.generate_response(user_query, {}, "general_query", role)
 
-        # Log to AI Logs in Supabase
-        self.supabase.table("ai_logs").insert({
-            "user_id": user_id,
-            "agent_name": "Orchestrator",
-            "query": user_query,
-            "intent": intent,
-            "response": response,
-            "metadata": metadata
-        }).execute()
+        # Log to AI Logs in Supabase with safety
+        try:
+            self.supabase.table("ai_logs").insert({
+                "user_id": user_id,
+                "agent_name": "Orchestrator",
+                "query": user_query,
+                "intent": intent,
+                "response": response,
+                "metadata": metadata
+            }).execute()
+        except Exception as e:
+            print(f"[TACTICAL ERROR] Failed to log AI interaction: {e}")
 
         return response
 

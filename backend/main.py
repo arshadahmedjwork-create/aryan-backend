@@ -47,31 +47,45 @@ class ChatRequest(BaseModel):
 
 @app.post("/chat")
 async def chat(request: ChatRequest, current_user = Depends(get_current_user), supabase = Depends(get_supabase)):
-    conv_agent = ConversationAgent()
-    orchestrator = OrchestratorAgent(supabase)
-    
-    # 1. Extract Intent (Role-Aware)
-    analysis = await conv_agent.analyze_query(request.message, current_user.role)
-    intent = analysis.get("intent", "general_query")
-    
-    # 2. Log Message
-    supabase.table("messages").insert({
-        "user_id": str(current_user.id),
-        "role": "user",
-        "content": request.message
-    }).execute()
-    
-    # 3. Handle via Orchestrator (Role-Aware)
-    response_text = await orchestrator.handle_request(request.message, intent, str(current_user.id), current_user.role)
-    
-    # 4. Log AI Response
-    supabase.table("messages").insert({
-        "user_id": str(current_user.id),
-        "role": "assistant",
-        "content": response_text
-    }).execute()
-    
-    return {"response": response_text, "intent": intent}
+    try:
+        conv_agent = ConversationAgent()
+        orchestrator = OrchestratorAgent(supabase)
+        
+        # 1. Log User Message
+        supabase.table("messages").insert({
+            "user_id": str(current_user.id),
+            "role": "user",
+            "content": request.message
+        }).execute()
+        
+        # 2. Analyze User Query (Role-Aware)
+        analysis = await conv_agent.analyze_query(request.message, current_user.role)
+        intent = analysis.get("intent", "general_query")
+        
+        # 3. Orchestrate Response (Role-Aware)
+        response_text = await orchestrator.handle_request(
+            request.message, 
+            intent, 
+            str(current_user.id), 
+            current_user.role
+        )
+        
+        # 4. Log AI Response
+        supabase.table("messages").insert({
+            "user_id": str(current_user.id),
+            "role": "assistant",
+            "content": response_text
+        }).execute()
+        
+        return {"response": response_text, "intent": intent}
+    except Exception as e:
+        print(f"[CRITICAL FAIL] Intelligence Sync Error: {e}")
+        import traceback
+        traceback.print_exc()
+        return {
+            "response": "QueryNexis Intelligence is recalibrating tactical protocols. Neural link lost. Please retry.",
+            "intent": "error"
+        }
 
 @app.get("/ai/pulse")
 async def ai_pulse(current_user = Depends(get_current_user), supabase = Depends(get_supabase)):
