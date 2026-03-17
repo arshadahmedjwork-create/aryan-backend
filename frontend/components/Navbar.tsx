@@ -59,7 +59,7 @@ export default function Navbar() {
                     exit={{ opacity: 0, y: 10 }}
                     className="absolute right-0 mt-2 w-56 rounded-2xl glassmorphism border border-primary/20 p-2 z-50 shadow-2xl overflow-hidden"
                   >
-                    <div className="px-4 py-3 bg-primary/5 border-b border-primary/10 mb-2">
+                   <div className="px-4 py-3 bg-primary/5 border-b border-primary/10 mb-2">
                       <p className="text-[10px] text-primary uppercase tracking-[0.2em] font-black">Account Role</p>
                       <p className="text-sm font-bold mt-1 text-foreground capitalize">{user.role}</p>
                     </div>
@@ -68,9 +68,11 @@ export default function Navbar() {
                         Admin Dashboard
                       </Link>
                     )}
-                    <Link href="/orders" className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl transition-colors">
-                      My Orders
-                    </Link>
+                    {user.role === 'customer' && (
+                      <Link href="/orders" className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl transition-colors">
+                        My Orders
+                      </Link>
+                    )}
                     {user.role === 'driver' && (
                       <Link href="/driver" className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl transition-colors text-white font-bold italic">
                         Driver Hub
@@ -88,9 +90,14 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
         ) : (
-          <Link href="/login" className="px-5 py-2 bg-primary text-primary-foreground rounded-full font-bold hover:scale-105 transition-transform active:scale-95">
-            Login
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/login" className="text-sm font-bold text-white/60 hover:text-white transition-colors">
+              Log In
+            </Link>
+            <Link href="/login" className="px-5 py-2.5 bg-[#2563EB] text-white rounded-xl font-bold hover:scale-105 transition-transform active:scale-95 shadow-lg shadow-blue-600/20">
+              Get Started
+            </Link>
+          </div>
         )}
       </div>
     </nav>

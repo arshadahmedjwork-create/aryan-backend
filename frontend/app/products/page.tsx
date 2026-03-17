@@ -12,6 +12,7 @@ interface Product {
   description: string;
   price: number;
   image_url?: string;
+  category?: string;
 }
 
 export default function ProductsPage() {
@@ -27,67 +28,95 @@ export default function ProductsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background pt-32 px-8 pb-20">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">QueryNexis Selects</h1>
-            <p className="text-muted-foreground">Actionable intelligence for your catalog.</p>
-          </div>
-          
-          <div className="flex gap-4 w-full md:w-auto">
-            <div className="relative flex-1 md:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-              <input 
-                type="text" 
-                placeholder="Search items..." 
-                className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:border-white outline-none transition-colors" 
-              />
-            </div>
-            <button className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10">
-              <Filter size={20} />
-            </button>
+    <div className="min-h-screen bg-[#000000] pt-24 px-4 md:px-8 pb-32">
+      <div className="max-w-6xl mx-auto">
+        {/* Header Section */}
+        <div className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+            Products
+          </h1>
+
+          <div className="flex flex-wrap gap-3">
+            {["LATEST RELEASE", "BENCHMARKED", "OPEN WEIGHTS"].map((filter) => (
+              <button
+                key={filter}
+                className="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-[10px] font-bold text-white/60 hover:text-white hover:border-white/20 transition-all uppercase tracking-widest"
+              >
+                {filter}
+              </button>
+            ))}
           </div>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {[1,2,3,4].map(i => (
-              <div key={i} className="aspect-[4/5] rounded-3xl bg-white/5 animate-pulse" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="h-96 rounded-[32px] bg-white/5 animate-pulse border border-white/5" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {products.map((p, i) => (
               <motion.div
                 key={p.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-                className="group relative rounded-3xl glassmorphism overflow-hidden cursor-pointer"
+                className="group bg-[#0A0A0A] rounded-[32px] border border-white/[0.05] overflow-hidden flex flex-col"
               >
-                <div className="aspect-[4/5] bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center">
+                {/* Visualization Area */}
+                <div className="relative h-64 bg-[#050505] border-b border-white/[0.05] flex items-center justify-center p-8 overflow-hidden">
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent blur-3xl" />
+                  </div>
+
+                  {/* Badge */}
+                  <div className="absolute top-6 left-6 px-3 py-1 bg-white/5 border border-white/10 rounded-md">
+                    <span className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase">
+                      {p.category || "FOUNDATION"}
+                    </span>
+                  </div>
+
                   {p.image_url ? (
-                    <img src={p.image_url} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <img src={p.image_url} alt={p.name} className="relative z-10 max-h-full object-contain group-hover:scale-110 transition-transform duration-700" />
                   ) : (
-                    <div className="text-white/5 font-black text-6xl uppercase">{p.name[0]}</div>
+                    <div className="relative z-10 w-48 h-48 border border-white/5 rounded-full flex items-center justify-center">
+                      <div className="w-32 h-32 border border-white/10 rounded-full animate-pulse flex items-center justify-center">
+                        <div className="w-16 h-16 bg-white/5 rounded-full" />
+                      </div>
+                    </div>
                   )}
                 </div>
-                
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-bold group-hover:text-white transition-colors">{p.name}</h3>
-                    <span className="text-lg font-black">₹{p.price}</span>
+
+                {/* Content Area */}
+                <div className="p-8 pb-10">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-2xl font-bold text-white tracking-tight">{p.name}</h3>
+                    <button className="p-1.5 bg-white/5 rounded-full text-white/30 hover:text-white transition-colors">
+                      <Plus className="rotate-45" size={18} /> {/* Info/Close placeholder like icon */}
+                    </button>
                   </div>
-                  <p className="text-sm text-muted-foreground line-clamp-1 mb-4">{p.description}</p>
-                  
-                  <button 
-                    onClick={() => addToCart(p)}
-                    className="w-full py-3 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-neutral-100 transition-all transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
-                  >
-                    <Plus size={18} /> Add to Cart
-                  </button>
+
+                  <p className="text-sm text-white/50 leading-relaxed mb-8 max-w-[90%] font-medium">
+                    {p.description}
+                  </p>
+
+                  <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/[0.05]">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-sm font-medium text-white/40">₹</span>
+                      <span className="text-2xl font-bold text-white leading-none">
+                        {p.price.toLocaleString()}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => addToCart(p)}
+                      className="px-6 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold rounded-2xl flex items-center gap-3 transition-all active:scale-95 shadow-lg shadow-blue-500/10"
+                    >
+                      <Plus size={18} className="text-white" />
+                      <span className="text-xs tracking-wider uppercase">Deploy to Cart</span>
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             ))}

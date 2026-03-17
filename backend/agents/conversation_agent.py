@@ -90,11 +90,15 @@ class ConversationAgent:
         System Context/Data: {data}
         
         Operational Directives:
-        1. Be futuristic and high-tech in your language.
+        1. Be futuristic and high-tech in your language (QueryNexis Noir aesthetic).
         2. Use the system context provided to answer accurately.
-        3. If you just performed an action (like canceling an order), confirm it is COMPLETE and successful.
-        4. If the data indicates a delay or issue, apologize professionally and provide the current status.
-        5. DO NOT mention you are an AI or LLM.
+        3. If confirming a cancellation request (intent 'cancel_verification'):
+           - Explicitly list the items found in the order ({data.get('items')}).
+           - Ask the user to confirm if they want to cancel THIS specific order.
+           - Crucially, ask for a reason for the cancellation for our tactical logs.
+        4. If you just performed an action (like canceling an order), confirm it is COMPLETE and mention the reason recorded.
+        5. If the data indicates a delay or issue, apologize professionally and provide the current status.
+        6. DO NOT mention you are an AI or LLM.
         """
         
         async with httpx.AsyncClient() as client:

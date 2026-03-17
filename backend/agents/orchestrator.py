@@ -51,9 +51,30 @@ class OrchestratorAgent:
                 order_id = recent["id"] if recent else None
             
             if order_id:
-                # AUTONOMOUS ACTION: Update order status to cancelled
-                self.supabase.table("orders").update({"status": "cancelled"}).eq("id", order_id).execute()
-                response = await self.conv_agent.generate_response(user_query, {"order_id": order_id, "action": "cancelled"}, intent, role)
+                # 1. Fetch Order Items for confirmation
+                items_res = self.supabase.table("order_items").select("products(name), quantity").eq("order_id", order_id).execute()
+                items_list = [f"{item['products']['name']} x{item['quantity']}" for item in items_res.data]
+                
+                # 2. Check if this is a confirmation step (user likely provided a reason)
+                # We interpret the presence of a message without a new intent as the reason
+                reason = self.extract_reason(user_query)
+                
+                if reason and ("confirm" in user_query.lower() or "yes" in user_query.lower() or "proceed" in user_query.lower()):
+                    # AUTONOMOUS ACTION: Update order status to cancelled with reason
+                    self.supabase.table("orders").update({
+                        "status": "cancelled",
+                        "cancellation_reason": reason
+                    }).eq("id", order_id).execute()
+                    response = await self.conv_agent.generate_response(user_query, {"order_id": order_id, "action": "cancelled", "reason": reason}, intent, role)
+                else:
+                    # Request confirmation and reason
+                    data = {
+                        "order_id": order_id,
+                        "items": items_list,
+                        "step": "verification_required",
+                        "instruction": "Ask the user to confirm cancellation of these specific items and provide a reason."
+                    }
+                    response = await self.conv_agent.generate_response(user_query, data, "cancel_verification", role)
             else:
                 response = "Which order would you like to cancel? I couldn't find a recent one to target."
 
@@ -125,3 +146,14 @@ class OrchestratorAgent:
             return short_match.group(1) # Return just the hex part
             
         return None
+
+    def extract_reason(self, query: str):
+        # A simple heuristic: if a user is confirming and providing text, that text is the reason
+        # We strip out common confirmation words
+        confirmation_keywords = ["yes", "confirm", "proceed", "cancel", "order", "my", "please", "i", "want", "to"]
+        words = query.lower().split()
+        reason_words = [w for w in words if w not in confirmation_keywords and len(w) > 2]
+        
+        if len(reason_words) > 0:
+            return " ".join(reason_words).capitalize()
+        return "No specific reason provided."

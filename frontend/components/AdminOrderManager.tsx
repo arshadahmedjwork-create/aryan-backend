@@ -113,6 +113,12 @@ export default function AdminOrderManager() {
               <div className="space-y-2 mb-6 text-sm text-muted-foreground">
                  <p className="flex justify-between"><span>Items:</span> <span className="text-white font-bold">{order.order_items?.length || 0}</span></p>
                   <p className="flex justify-between"><span>Total:</span> <span className="text-white font-bold">₹{order.total_price.toFixed(2)}</span></p>
+                  {order.status === 'cancelled' && order.cancellation_reason && (
+                    <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
+                      <p className="text-[10px] uppercase font-bold text-red-400 tracking-wider mb-1">Cancellation Logic</p>
+                      <p className="text-white text-xs italic">"{order.cancellation_reason}"</p>
+                    </div>
+                  )}
               </div>
               <button 
                 onClick={() => window.location.href=`/orders/${order.id}`}

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, Truck, ShieldCheck, ArrowRight } from 'lucide-react';
+import { CreditCard, Truck, ShieldCheck, ArrowRight, Lock, Headphones } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/auth';
@@ -50,115 +50,143 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-32 px-8 pb-20">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-12">Checkout</h1>
-        
-        <div className="grid md:grid-cols-3 gap-12">
-          <div className="md:col-span-2 space-y-8">
-            {/* Step 1: Shipping */}
-            <section className={`p-8 rounded-3xl glassmorphism ${step !== 1 && 'opacity-50'}`}>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-black">1</span>
-                  Shipping Information
-                </h2>
-                {step > 1 && <button onClick={() => setStep(1)} className="text-white/40 hover:text-white text-sm">Edit</button>}
-              </div>
-              
-              {step === 1 && (
-                <div className="space-y-4">
-                  <input type="text" placeholder="Full Name" defaultValue={user?.full_name || ''} className="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-white" />
-                  <input type="text" placeholder="Street Address" className="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-white" />
-                  <div className="grid grid-cols-2 gap-4">
-                    <input type="text" placeholder="City" className="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-white" />
-                    <input type="text" placeholder="ZIP Code" className="w-full p-4 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-white" />
-                  </div>
-                  <button 
-                    onClick={() => setStep(2)}
-                    className="w-full py-4 bg-white text-black font-bold rounded-xl mt-4 hover:bg-neutral-200 transition-colors"
-                  >
-                    Continue to Payment
-                  </button>
+    <div className="min-h-screen bg-[#000000] pt-24 px-4 md:px-8 pb-32">
+      <div className="max-w-2xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-[0.02em]">
+            Secure Checkout
+          </h1>
+          <p className="text-white/40 font-medium text-sm md:text-base max-w-md mx-auto leading-relaxed">
+            Complete your order for the Nexis Intelligence Suite. Your data is encrypted and secure.
+          </p>
+        </div>
+
+        {/* Checkout Card */}
+        <div className="bg-[#0A0A0A] rounded-[48px] border border-white/[0.05] p-8 md:p-12 shadow-2xl overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
+          
+          <div className="space-y-16">
+            {/* Shipping Details */}
+            <section>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-10 h-10 bg-[#2563EB]/10 rounded-xl flex items-center justify-center text-[#2563EB]">
+                  <Truck size={24} />
                 </div>
-              )}
+                <h2 className="text-2xl font-black text-white tracking-tight">Shipping Details</h2>
+              </div>
+
+              <div className="grid gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">Full Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="John Doe" 
+                    defaultValue={user?.full_name || ''} 
+                    className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">Email Address</label>
+                  <input 
+                    type="email" 
+                    placeholder="john@querynexis.com" 
+                    defaultValue={user?.email || ''} 
+                    className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">Street Address</label>
+                  <input 
+                    type="text" 
+                    placeholder="123 Analytics Way" 
+                    className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium"
+                  />
+                </div>
+                <div className="space-y-2">
+                   <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">City</label>
+                   <input 
+                     type="text" 
+                     placeholder="San Francisco" 
+                     className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium"
+                   />
+                </div>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">State</label>
+                    <input type="text" placeholder="CA" className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">ZIP</label>
+                    <input type="text" placeholder="94103" className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium" />
+                  </div>
+                </div>
+              </div>
             </section>
 
-            {/* Step 2: Payment */}
-            <section className={`p-8 rounded-3xl glassmorphism ${step !== 2 && 'opacity-50'}`}>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-black">2</span>
-                  Payment Method
-                </h2>
-              </div>
-              
-              {step === 2 && (
-                <div className="space-y-6">
-                  <div className="p-6 border-2 border-white bg-white/5 rounded-2xl flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <CreditCard className="text-white" />
-                      <div>
-                        <p className="font-bold">Demo Card (Instant Payment)</p>
-                        <p className="text-sm text-muted-foreground">Ending in 4242</p>
-                      </div>
+            {/* Order Summary */}
+            <section>
+              <div className="flex items-center justify-between mb-8">
+                 <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500">
+                       <CreditCard size={24} />
                     </div>
-                    <div className="w-6 h-6 rounded-full border-4 border-white"></div>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <ShieldCheck size={14} className="text-green-500" />
-                    Secure encrypted transaction
-                  </div>
-                  
-                  <button 
-                    onClick={handleCheckout}
-                    disabled={loading}
-                    className="w-full py-4 bg-white text-black font-bold rounded-xl mt-4 hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 shadow-xl shadow-white/10"
-                  >
-                    {loading ? "Processing..." : <>Complete Purchase <ArrowRight size={20} /></>}
-                  </button>
-                </div>
-              )}
-            </section>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            <div className="p-8 rounded-3xl glassmorphism sticky top-32">
-              <h3 className="font-bold mb-6">Order Summary</h3>
-              <div className="space-y-4 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span>₹{subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Shipping</span>
-                  <span className="text-green-500">Free</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Estimated Tax</span>
-                  <span>₹{tax.toFixed(2)}</span>
-                </div>
-                <div className="border-t border-white/10 pt-4 flex justify-between font-bold text-lg">
-                  <span>Total</span>
-                  <span className="text-white">₹{total.toFixed(2)}</span>
-                </div>
+                    <h2 className="text-2xl font-black text-white tracking-tight">Order Summary</h2>
+                 </div>
+                 <span className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase">INR</span>
               </div>
-              
-              <div className="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
-                <p className="text-[10px] text-muted-foreground uppercase mb-2 font-bold tracking-widest">Items ({cart.length})</p>
-                <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
-                   {cart.map((item: any) => (
-                     <div key={item.id} className="flex justify-between text-xs">
-                       <span className="line-clamp-1">{item.name} x{item.qty}</span>
-                       <span className="font-bold">₹{(item.price * item.qty).toFixed(2)}</span>
-                     </div>
-                   ))}
-                </div>
+
+              <div className="bg-[#050505] rounded-[32px] border border-white/5 p-8 space-y-6">
+                 {cart.map((item: any) => (
+                    <div key={item.id} className="flex justify-between items-center text-sm">
+                       <span className="text-white/60 font-medium">{item.name} Unit x{item.qty}</span>
+                       <span className="font-bold text-white">₹{(item.price * item.qty).toLocaleString()}</span>
+                    </div>
+                 ))}
+                 <div className="flex justify-between items-center text-sm">
+                    <span className="text-white/60 font-medium">Shipping Protocol</span>
+                    <span className="text-[10px] font-black text-[#22C55E] tracking-widest uppercase">Complimentary</span>
+                 </div>
+                 <div className="pt-6 border-t border-white/5 flex justify-between items-center">
+                    <span className="text-xl font-bold text-white tracking-tight">Total Amount</span>
+                    <span className="text-4xl font-black text-white tracking-tighter italic">₹{total.toLocaleString()}</span>
+                 </div>
+              </div>
+            </section>
+
+            {/* CTA */}
+            <div className="space-y-8">
+              <button 
+                onClick={handleCheckout}
+                disabled={loading}
+                className="w-full py-6 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-black rounded-[28px] flex items-center justify-center gap-4 transition-all active:scale-95 shadow-2xl shadow-blue-600/20 group disabled:opacity-50"
+              >
+                <span className="text-lg tracking-[0.1em] uppercase">{loading ? "Synchronizing..." : "Complete Order"}</span>
+                {!loading && <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />}
+              </button>
+
+              <div className="flex items-center justify-center gap-3 text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">
+                 <Lock size={14} fill="currentColor" />
+                 <span>Encrypted 256-bit AES Connection</span>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Protection Badges */}
+        <div className="mt-16 flex flex-wrap justify-center gap-12">
+            <div className="flex items-center gap-3 text-white/40">
+               <ShieldCheck size={20} className="text-blue-500/60" />
+               <span className="text-[10px] font-black uppercase tracking-widest">Verified</span>
+            </div>
+            <div className="flex items-center gap-3 text-white/40">
+               <Truck size={20} className="text-blue-500/60" />
+               <span className="text-[10px] font-black uppercase tracking-widest">Fast Delivery</span>
+            </div>
+            <div className="flex items-center gap-3 text-white/40">
+               <Headphones size={20} className="text-blue-500/60" />
+               <span className="text-[10px] font-black uppercase tracking-widest">24/7 Support</span>
+            </div>
         </div>
       </div>
     </div>
