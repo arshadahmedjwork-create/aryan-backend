@@ -110,16 +110,22 @@ export default function AIChat() {
                     <>
                       <button onClick={() => setInput('Show revenue summary')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-all">Revenue Analytics</button>
                       <button onClick={() => setInput('Fleet tactical status')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-all">Fleet Status</button>
+                      <button onClick={() => setInput('Top performing units')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-all">Top Units</button>
+                      <button onClick={() => setInput('System integrity check')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-all">System Health</button>
                     </>
                   ) : user?.role === 'driver' ? (
                     <>
                       <button onClick={() => setInput('My active missions')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">My Missions</button>
                       <button onClick={() => setInput('Sync coordinates')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Sync GPS</button>
+                      <button onClick={() => setInput('Route optimization')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Optimize Route</button>
+                      <button onClick={() => setInput('Support request')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Help Desk</button>
                     </>
                   ) : (
                     <>
                       <button onClick={() => setInput('Track my order')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Track Order</button>
-                      <button onClick={() => setInput('I want to cancel an order')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Order Cancellation</button>
+                      <button onClick={() => setInput('Cancel my order')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Cancel Order</button>
+                      <button onClick={() => setInput('Show new products')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">New Arrivals</button>
+                      <button onClick={() => setInput('Refund status')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Refunds</button>
                     </>
                   )}
                 </div>

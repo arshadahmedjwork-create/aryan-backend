@@ -81,7 +81,8 @@ async def chat(request: ChatRequest, current_user = Depends(get_current_user), s
             request.message, 
             intent, 
             str(current_user.id), 
-            current_user.role
+            current_user.role,
+            history
         )
         
         # 4. Log AI Response

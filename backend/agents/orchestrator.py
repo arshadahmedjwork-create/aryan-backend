@@ -13,7 +13,7 @@ class OrchestratorAgent:
         self.alert_agent = AlertMonitoringAgent(supabase)
         self.conv_agent = ConversationAgent()
 
-    async def handle_request(self, user_query: str, intent: str, user_id: str, role: str = "customer"):
+    async def handle_request(self, user_query: str, intent: str, user_id: str, role: str = "customer", history: list = []):
         response = ""
         metadata = {}
 
@@ -46,40 +46,87 @@ class OrchestratorAgent:
         
         elif intent == "cancel_order":
             order_id = self.extract_order_id(user_query)
+            lower_query = user_query.lower()
+            
+            # Check for negative response
+            negative_signals = ["no", "denied", "stop", "don't", "dont", "negative"]
+            is_negative = any(sig == lower_query.strip(".,!?") for sig in negative_signals)
+            
+            # Get last assistant question from history
+            last_assistant_msg = next((m['content'] for m in reversed(history) if m['role'] == 'assistant'), "")
+            
+            if is_negative:
+                if "provide" in last_assistant_msg.lower() and "order id" in last_assistant_msg.lower():
+                    # Case: Order ID? -> no -> overview of new products
+                    products = await self.product_agent.get_recommendations()
+                    response = "Neural link maintained. No orders have been terminated. As per protocol, here is an overview of our latest high-performance products in the store."
+                    metadata = {"products": products[:3]}
+                    return response
+                elif "confirm" in last_assistant_msg.lower() or "verification" in last_assistant_msg.lower():
+                    # Case: Confirm? -> no -> Can you provide order id?
+                    response = "Acknowledgment. If that was not the correct target, please provide the specific Order ID for the order you wish to terminate."
+                    return response
+                else:
+                    response = "Understood. Cancellation protocol aborted. How else can I assist you today?"
+                    return response
+
             if not order_id:
-                recent = await self.delivery_agent.get_recent_order(user_id)
-                order_id = recent["id"] if recent else None
+                # Try to find order id in history if not in query
+                for m in reversed(history):
+                    id_in_history = self.extract_order_id(m['content'])
+                    if id_in_history:
+                        order_id = id_in_history
+                        break
+                
+                # If still no order_id, check for recent order
+                if not order_id:
+                    recent = await self.delivery_agent.get_recent_order(user_id)
+                    order_id = recent["id"] if recent else None
             
             if order_id:
                 # 1. Fetch Order Items for confirmation
                 items_res = self.supabase.table("order_items").select("products(name), quantity").eq("order_id", order_id).execute()
                 items_list = [f"{item['products']['name']} x{item['quantity']}" for item in items_res.data]
                 
-                # 2. Check if this is a confirmation step
+                # 2. Check for confirmation
+                confirmation_signals = ["confirm", "yes", "proceed", "ok", "sure", "yep", "do it", "cancel it", "please cancel", "cancel that"]
+                is_confirming = any(sig in lower_query for sig in confirmation_signals)
+                
                 reason = self.extract_reason(user_query)
                 
-                # Check for explicit confirmation words or reiteration of cancellation
-                confirmation_signals = ["confirm", "yes", "proceed", "ok", "sure", "yep", "do it", "cancel it", "please cancel", "cancel that"]
-                is_confirming = any(sig in user_query.lower() for sig in confirmation_signals)
-                
                 if is_confirming:
-                    # AUTONOMOUS ACTION: Update order status to cancelled with reason
+                    # Case: Confirm? -> yes (with or without reason)
+                    if reason == "No specific reason provided.":
+                        # Check history for reason if they said "yes" to "To complete... state the reason"
+                        if "state the reason" in last_assistant_msg.lower() or "reason" in last_assistant_msg.lower():
+                            # The current query might be the reason itself if it's not a simple "yes"
+                            if len(user_query.split()) > 1:
+                                reason = user_query
+                            else:
+                                response = "Acknowledgment received. To complete the termination protocol, please state the reason for cancellation."
+                                return response
+                        else:
+                            response = "Acknowledgment received. To complete the termination protocol, please state the reason for cancellation."
+                            return response
+                    
+                    # If we have reason or it's provided now
                     self.supabase.table("orders").update({
                         "status": "cancelled",
                         "cancellation_reason": reason
                     }).eq("id", order_id).execute()
                     response = await self.conv_agent.generate_response(user_query, {"order_id": order_id, "action": "cancelled", "reason": reason}, intent, role)
                 else:
-                    # Request confirmation and reason
+                    # If they provided an order ID but didn't confirm yet
+                    # OR they just said "Cancel my order"
                     data = {
                         "order_id": order_id,
                         "items": items_list,
-                        "step": "verification_required",
-                        "instruction": "Ask the user to confirm cancellation of these specific items and provide a reason."
+                        "instruction": f"Your order {order_id[:8]} containing {', '.join(items_list)} is identified. Please confirm if you wish to proceed with termination."
                     }
                     response = await self.conv_agent.generate_response(user_query, data, "cancel_verification", role)
             else:
-                response = "Which order would you like to cancel? I couldn't find a recent one to target."
+                # No order ID found anywhere
+                response = "To initiate termination protocols, I require a specific Order ID. Could you please provide the identification string for the target order?"
 
         elif intent == "refund_request":
             order_id = self.extract_order_id(user_query)

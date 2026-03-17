@@ -103,29 +103,47 @@ export default function ChatScreen() {
               <View style={styles.chipsContainer}>
                 {user?.role === 'admin' ? (
                   <>
-                    <TouchableOpacity onPress={() => sendMessage('Show revenue summary')} style={styles.chip}>
+                    <TouchableOpacity onPress={() => setInput('Show revenue summary')} style={styles.chip}>
                       <Text style={styles.chipText}>Revenue Analytics</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => sendMessage('Fleet tactical status')} style={styles.chip}>
+                    <TouchableOpacity onPress={() => setInput('Fleet tactical status')} style={styles.chip}>
                       <Text style={styles.chipText}>Fleet Status</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setInput('Highest selling products')} style={styles.chip}>
+                      <Text style={styles.chipText}>Top Products</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setInput('Check system health')} style={styles.chip}>
+                      <Text style={styles.chipText}>System Health</Text>
                     </TouchableOpacity>
                   </>
                 ) : user?.role === 'driver' ? (
                   <>
-                    <TouchableOpacity onPress={() => sendMessage('My active missions')} style={styles.chip}>
+                    <TouchableOpacity onPress={() => setInput('My active missions')} style={styles.chip}>
                       <Text style={styles.chipText}>Active Missions</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => sendMessage('Sync coordinates')} style={styles.chip}>
+                    <TouchableOpacity onPress={() => setInput('Sync coordinates')} style={styles.chip}>
                       <Text style={styles.chipText}>Sync GPS</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setInput('Check traffic status')} style={styles.chip}>
+                      <Text style={styles.chipText}>Traffic Intel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setInput('Emergency support')} style={styles.chip}>
+                      <Text style={styles.chipText}>Emergency</Text>
                     </TouchableOpacity>
                   </>
                 ) : (
                   <>
-                    <TouchableOpacity onPress={() => sendMessage('Track my order')} style={styles.chip}>
+                    <TouchableOpacity onPress={() => setInput('Track my order')} style={styles.chip}>
                       <Text style={styles.chipText}>Track Order</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => sendMessage('I want to cancel an order')} style={styles.chip}>
+                    <TouchableOpacity onPress={() => setInput('Cancel my order')} style={styles.chip}>
                       <Text style={styles.chipText}>Cancel Order</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setInput('New products in store')} style={styles.chip}>
+                      <Text style={styles.chipText}>Recent Arrivals</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setInput('Refund protocol')} style={styles.chip}>
+                      <Text style={styles.chipText}>Refund Request</Text>
                     </TouchableOpacity>
                   </>
                 )}

@@ -37,10 +37,13 @@ Return ONLY a JSON object:
   "intent": "intent_name",
   "entities": {
     "order_id": "123",
-    "search_query": "burger"
+    "search_query": "burger",
+    "confirmation": true/false
   },
   "context_relevance": "summary of why this intent was chosen based on history"
 }
+
+Note: If the user says "No" when asked for an order ID or confirmation, the intent is still 'cancel_order' but with a negative context that the orchestrator will handle.
 """
 
 class ConversationAgent:
