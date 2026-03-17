@@ -51,9 +51,9 @@ class OrchestratorAgent:
                 order_id = recent["id"] if recent else None
             
             if order_id:
-                # AUTONOMOUS ACTION: Update order status to canceled
-                self.supabase.table("orders").update({"status": "canceled"}).eq("id", order_id).execute()
-                response = await self.conv_agent.generate_response(user_query, {"order_id": order_id, "action": "canceled"}, intent, role)
+                # AUTONOMOUS ACTION: Update order status to cancelled
+                self.supabase.table("orders").update({"status": "cancelled"}).eq("id", order_id).execute()
+                response = await self.conv_agent.generate_response(user_query, {"order_id": order_id, "action": "cancelled"}, intent, role)
             else:
                 response = "Which order would you like to cancel? I couldn't find a recent one to target."
 
@@ -61,7 +61,7 @@ class OrchestratorAgent:
             order_id = self.extract_order_id(user_query)
             if order_id:
                 # AUTONOMOUS ACTION: Initiate refund protocol
-                self.supabase.table("orders").update({"payment_status": "refunding"}).eq("id", order_id).execute()
+                self.supabase.table("orders").update({"payment_status": "refunding", "status": "refunding"}).eq("id", order_id).execute()
                 response = await self.conv_agent.generate_response(user_query, {"order_id": order_id, "action": "refund_initiated"}, intent, role)
             else:
                 response = "Please provide the Order ID for the refund request so I can initiate the protocol."

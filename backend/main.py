@@ -38,6 +38,10 @@ app.include_router(product_routes.router)
 app.include_router(order_routes.router)
 app.include_router(delivery_routes.router)
 
+@app.get("/health")
+async def health():
+    return {"status": "operational", "version": "2.0.0-agentic"}
+
 class ChatRequest(BaseModel):
     message: str
 
