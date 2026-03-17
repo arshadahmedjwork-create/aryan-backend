@@ -112,6 +112,36 @@ async def me(current_user: User = Depends(get_current_user)):
     return current_user
 
 @router.get("/drivers")
-async def list_drivers(supabase = Depends(get_supabase)):
-    res = supabase.table("users").select("id, full_name, email").eq("role", "driver").execute()
+async def list_drivers(current_user: User = Depends(get_current_user), supabase = Depends(get_supabase)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized")
+    res = supabase.table("users").select("id, full_name, email, role").eq("role", "driver").execute()
+    return res.data
+
+@router.post("/register/driver")
+async def register_driver(user_data: UserBase, password: str, current_user: User = Depends(get_current_user), supabase = Depends(get_supabase)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Check if user already exists
+    res = supabase.table("users").select("*").eq("email", user_data.email).execute()
+    if res.data:
+        raise HTTPException(status_code=400, detail="Driver already registered")
+        
+    new_driver = {
+        "email": user_data.email,
+        "role": "driver",
+        "full_name": user_data.full_name,
+        "password_hash": get_password_hash(password)
+    }
+    
+    res = supabase.table("users").insert(new_driver).execute()
+    return {"message": "Driver unit registered", "driver": res.data[0]}
+
+@router.get("/drivers/{driver_id}/missions/")
+async def driver_missions(driver_id: str, current_user: User = Depends(get_current_user), supabase = Depends(get_supabase)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized")
+        
+    res = supabase.table("deliveries").select("*, orders(*)").eq("driver_id", driver_id).order("created_at", desc=True).execute()
     return res.data

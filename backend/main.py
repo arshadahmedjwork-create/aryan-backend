@@ -46,8 +46,8 @@ async def chat(request: ChatRequest, current_user = Depends(get_current_user), s
     conv_agent = ConversationAgent()
     orchestrator = OrchestratorAgent(supabase)
     
-    # 1. Extract Intent
-    analysis = await conv_agent.analyze_query(request.message)
+    # 1. Extract Intent (Role-Aware)
+    analysis = await conv_agent.analyze_query(request.message, current_user.role)
     intent = analysis.get("intent", "general_query")
     
     # 2. Log Message
@@ -57,8 +57,8 @@ async def chat(request: ChatRequest, current_user = Depends(get_current_user), s
         "content": request.message
     }).execute()
     
-    # 3. Handle via Orchestrator
-    response_text = await orchestrator.handle_request(request.message, intent, str(current_user.id))
+    # 3. Handle via Orchestrator (Role-Aware)
+    response_text = await orchestrator.handle_request(request.message, intent, str(current_user.id), current_user.role)
     
     # 4. Log AI Response
     supabase.table("messages").insert({
@@ -68,6 +68,13 @@ async def chat(request: ChatRequest, current_user = Depends(get_current_user), s
     }).execute()
     
     return {"response": response_text, "intent": intent}
+
+@app.get("/ai/pulse")
+async def ai_pulse(current_user = Depends(get_current_user), supabase = Depends(get_supabase)):
+    from agents.alert_agent import AlertMonitoringAgent
+    alert_agent = AlertMonitoringAgent(supabase)
+    latest = await alert_agent.get_latest_critical_alert(current_user.role)
+    return {"alert": latest}
 
 if __name__ == "__main__":
     import uvicorn

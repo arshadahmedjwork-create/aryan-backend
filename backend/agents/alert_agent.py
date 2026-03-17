@@ -49,7 +49,7 @@ class AlertMonitoringAgent:
         return new_alerts
 
     async def check_unusual_sales(self):
-        # Detect if sales in last hour are 50% lower than previous hour (very simple pattern)
+        # Detect if sales in last hour are 50% lower than previous hour
         now = datetime.utcnow()
         last_hour = (now - timedelta(hours=1)).isoformat()
         prev_hour = (now - timedelta(hours=2)).isoformat()
@@ -61,7 +61,7 @@ class AlertMonitoringAgent:
         total_prev = sum(o["total_price"] for o in res_prev.data)
         
         if total_prev > 100 and total_now < (total_prev * 0.5):
-            alert_msg = f"Unusual Sales Pattern: Revenue dropped from ${total_prev} to ${total_now} in the last hour."
+            alert_msg = f"Unusual Sales Pattern: Revenue dropped from ₹{total_prev} to ₹{total_now} in the last hour. Autonomous analysis required."
             self.supabase.table("alerts").insert({
                 "type": "revenue",
                 "severity": "critical",
@@ -69,3 +69,11 @@ class AlertMonitoringAgent:
             }).execute()
             return [alert_msg]
         return []
+
+    async def get_latest_critical_alert(self, role: str):
+        # Fetch the most recent high/critical alert for the UI Pulse
+        query = self.supabase.table("alerts").select("*").order("created_at", desc=True).limit(1)
+        if role == "customer":
+            query = query.eq("type", "delivery") # Customers only care about delivery delays
+        res = query.execute()
+        return res.data[0] if res.data else None

@@ -45,7 +45,7 @@ export default function CartPage() {
                   
                   <div className="flex-1">
                     <h3 className="font-bold text-lg">{item.name}</h3>
-                    <p className="text-white font-black">${item.price}</p>
+                    <p className="text-white font-black">₹{item.price}</p>
                   </div>
 
                   <div className="flex items-center gap-4 bg-white/5 rounded-xl p-1 px-3 border border-white/10">

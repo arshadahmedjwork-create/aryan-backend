@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "QueryNexis",
+    "slug": "querynexis",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": false,
+    "updates": {
+      "url": "https://u.expo.dev/407dbef1-6cc0-45f3-a048-9141743c8253"
+    },
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundColor": "#000000"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "API_URL": "https://aryan-backend-xpnr.onrender.com",
+      "eas": {
+        "projectId": "407dbef1-6cc0-45f3-a048-9141743c8253"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }
+  }
+}

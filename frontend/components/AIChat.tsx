@@ -5,13 +5,26 @@ import { useState } from 'react';
 import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
 import api from '@/lib/api';
 
+import { useAuth } from '@/lib/auth';
+
 export default function AIChat() {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hello! I am QueryNexis Intelligence. How can I assist you today?' }
-  ]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Initialize with role-based welcome
+  useState(() => {
+    const role = user?.role || 'customer';
+    const welcome = role === 'admin' 
+      ? 'Welcome to Command Intelligence. Tactical metrics and fleet status are available for analysis.' 
+      : role === 'driver'
+      ? 'Tactical Coordination active. Ready for mission briefing and route optimization.'
+      : 'Hello! I am QueryNexis Concierge. How can I assist with your orders today?';
+    
+    setMessages([{ role: 'assistant', content: welcome }]);
+  });
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -69,19 +82,46 @@ export default function AIChat() {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {messages.map((m, i) => (
-                <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  key={i} 
+                  className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
                   <div className={`max-w-[80%] p-4 rounded-2xl text-sm ${
                     m.role === 'user' 
-                      ? 'bg-primary text-primary-foreground rounded-tr-none' 
-                      : 'bg-accent border border-border rounded-tl-none text-foreground'
+                      ? 'bg-white text-black rounded-tr-none shadow-lg' 
+                      : 'bg-white/5 border border-white/10 rounded-tl-none text-white backdrop-blur-md'
                   }`}>
                     {m.content}
                   </div>
-                </div>
+                </motion.div>
               ))}
               {loading && (
                 <div className="flex justify-start">
                    <div className="bg-white/5 p-4 rounded-2xl rounded-tl-none animate-pulse">...</div>
+                </div>
+              )}
+
+              {/* Quick Actions */}
+              {!loading && messages.length === 1 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {user?.role === 'admin' ? (
+                    <>
+                      <button onClick={() => setInput('Show revenue summary')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-all">Revenue Analytics</button>
+                      <button onClick={() => setInput('Fleet tactical status')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-all">Fleet Status</button>
+                    </>
+                  ) : user?.role === 'driver' ? (
+                    <>
+                      <button onClick={() => setInput('My active missions')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">My Missions</button>
+                      <button onClick={() => setInput('Sync coordinates')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Sync GPS</button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={() => setInput('Track my order')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Track Order</button>
+                      <button onClick={() => setInput('I want to cancel an order')} className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">Order Cancellation</button>
+                    </>
+                  )}
                 </div>
               )}
             </div>

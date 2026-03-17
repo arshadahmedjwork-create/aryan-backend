@@ -57,9 +57,14 @@ export default function DriverDashboard() {
     <div className="min-h-screen bg-background pt-32 px-8 pb-20">
       <div className="max-w-5xl mx-auto">
         <header className="mb-12 flex justify-between items-end">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">Driver Hub</h1>
-            <p className="text-muted-foreground uppercase tracking-widest text-[10px] font-bold">Autonomous Deployment Unit: {user.full_name}</p>
+          <div className="flex items-center gap-6">
+            <div className="w-24 h-24 flex items-center justify-center">
+              <img src="/logo.png" alt="QueryNexis" className="w-full h-full object-contain" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold mb-1">Tactical Grid</h1>
+              <p className="text-muted-foreground uppercase tracking-widest text-[10px] font-bold">Autonomous Deployment Unit: {user.full_name}</p>
+            </div>
           </div>
           <div className="flex items-center gap-3 px-6 py-3 bg-white/10 border border-white/20 rounded-2xl shadow-lg shadow-white/5">
             <div className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.5)]" />

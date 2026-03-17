@@ -82,7 +82,7 @@ export default function OrderHistoryPage() {
                   <div className="flex items-center gap-8">
                     <div className="text-right hidden sm:block">
                       <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Total</p>
-                      <p className="text-lg font-black text-white">${order.total_price.toFixed(2)}</p>
+                      <p className="text-lg font-black text-white">₹{order.total_price.toFixed(2)}</p>
                     </div>
                     <ChevronRight className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
                   </div>

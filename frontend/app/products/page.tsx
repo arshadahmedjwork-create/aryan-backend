@@ -78,7 +78,7 @@ export default function ProductsPage() {
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-bold group-hover:text-white transition-colors">{p.name}</h3>
-                    <span className="text-lg font-black">${p.price}</span>
+                    <span className="text-lg font-black">₹{p.price}</span>
                   </div>
                   <p className="text-sm text-muted-foreground line-clamp-1 mb-4">{p.description}</p>
                   

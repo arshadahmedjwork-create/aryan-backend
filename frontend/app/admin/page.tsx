@@ -1,16 +1,17 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { Package, Truck, BarChart3, Plus, Search, UserCheck } from 'lucide-react';
+import { Package, Truck, BarChart3, Plus, Search, UserCheck, Users } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import AdminProductForm from '@/components/AdminProductForm';
 import AdminOrderManager from '@/components/AdminOrderManager';
+import AdminFleetManager from '@/components/AdminFleetManager';
 
 export default function AdminDashboard() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'analytics'>('orders');
+  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'analytics' | 'fleet'>('orders');
   const [showProductForm, setShowProductForm] = useState(false);
 
   if (user?.role !== 'admin') {
@@ -25,9 +26,14 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-background p-8 pt-32">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-12">
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight">QueryNexis Intelligence</h1>
-            <p className="text-muted-foreground mt-2">Autonomous Operations Dashboard</p>
+          <div className="flex items-center gap-6">
+            <div className="w-24 h-24 flex items-center justify-center">
+              <img src="/logo.png" alt="QueryNexis" className="w-full h-full object-contain" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold tracking-tight">Command Center</h1>
+              <p className="text-muted-foreground mt-1">Autonomous Operations Briefing</p>
+            </div>
           </div>
           
           <div className="flex bg-white/5 rounded-2xl p-1 border border-white/10">
@@ -42,6 +48,12 @@ export default function AdminDashboard() {
               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl transition-all ${activeTab === 'products' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'hover:bg-white/5'}`}
             >
               <Package size={18} /> Inventory
+            </button>
+            <button 
+              onClick={() => setActiveTab('fleet')}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl transition-all ${activeTab === 'fleet' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'hover:bg-white/5'}`}
+            >
+              <Users size={18} /> Fleet
             </button>
             <button 
               onClick={() => setActiveTab('analytics')}
@@ -74,11 +86,17 @@ export default function AdminDashboard() {
             </motion.div>
           )}
 
+          {activeTab === 'fleet' && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <AdminFleetManager />
+            </motion.div>
+          )}
+
           {activeTab === 'analytics' && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid md:grid-cols-3 gap-8">
                 <div className="p-8 rounded-[2.5rem] glassmorphism border border-border">
                   <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">Total Revenue</p>
-                  <h3 className="text-4xl font-black text-primary">$12,840.00</h3>
+                  <h3 className="text-4xl font-black text-primary">₹12,840.00</h3>
                   <p className="text-xs text-green-400 mt-2 font-bold">+14% from last week</p>
                 </div>
                 <div className="p-8 rounded-[2.5rem] glassmorphism border border-border">
@@ -116,7 +134,7 @@ function AdminProductListing({ onEdit }: { onEdit: (p: any) => void }) {
         <div key={p.id} className="p-6 rounded-3xl glassmorphism border border-border group">
           <div className="flex justify-between items-start mb-4">
             <h3 className="font-bold text-lg">{p.name}</h3>
-            <span className="text-primary font-black">${p.price}</span>
+            <span className="text-primary font-black">₹{p.price}</span>
           </div>
           <p className="text-sm text-muted-foreground mb-6 line-clamp-2">{p.description}</p>
           <div className="flex justify-between items-center">

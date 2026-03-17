@@ -38,8 +38,8 @@ export default function LoginPage() {
         className="max-w-md w-full"
       >
         <div className="text-center mb-10">
-          <div className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-white/10 rotate-12">
-            <Sparkles className="text-black" size={32} />
+          <div className="w-28 h-28 flex items-center justify-center mx-auto mb-6">
+            <img src="/logo.png" alt="QueryNexis" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-4xl font-black tracking-tight mb-2">Welcome Back</h1>
           <p className="text-muted-foreground">Log in to your QueryNexis

@@ -64,7 +64,10 @@ async def list_my_deliveries(current_user = Depends(get_current_user), supabase 
     if current_user.role != "driver" and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Not authorized")
     
-    query = supabase.table("deliveries").select("*, orders(*)").eq("driver_id", str(current_user.id))
+    query = supabase.table("deliveries").select("*, orders(*)")
+    if current_user.role == "driver":
+        query = query.eq("driver_id", str(current_user.id))
+    
     res = query.execute()
     return res.data
 

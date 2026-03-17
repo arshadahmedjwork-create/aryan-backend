@@ -67,7 +67,7 @@ export default function AdminOrderManager() {
                   </div>
                   <div>
                     <h3 className="font-bold text-xl">Order #{order.id.slice(0, 8)}</h3>
-                    <p className="text-muted-foreground text-sm">${order.total_price.toFixed(2)} • {new Date(order.created_at).toLocaleTimeString()}</p>
+                    <p className="text-muted-foreground text-sm">₹{order.total_price.toFixed(2)} • {new Date(order.created_at).toLocaleTimeString()}</p>
                   </div>
                 </div>
 
@@ -112,7 +112,7 @@ export default function AdminOrderManager() {
               </div>
               <div className="space-y-2 mb-6 text-sm text-muted-foreground">
                  <p className="flex justify-between"><span>Items:</span> <span className="text-white font-bold">{order.order_items?.length || 0}</span></p>
-                  <p className="flex justify-between"><span>Total:</span> <span className="text-white font-bold">${order.total_price.toFixed(2)}</span></p>
+                  <p className="flex justify-between"><span>Total:</span> <span className="text-white font-bold">₹{order.total_price.toFixed(2)}</span></p>
               </div>
               <button 
                 onClick={() => window.location.href=`/orders/${order.id}`}

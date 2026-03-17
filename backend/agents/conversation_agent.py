@@ -10,31 +10,39 @@ XAI_BASE_URL = os.getenv("XAI_BASE_URL", "https://openrouter.ai/api/v1")
 XAI_MODEL = os.getenv("XAI_MODEL", "meta-llama/llama-3.3-70b-instruct")
 
 SYSTEM_PROMPT = """
-You are the Conversation Agent for QueryNexis.
-Your task is to extract the user's intent and relevant entities from their message concisely.
+You are the Intelligence Core for QueryNexis.
+Analyze the user's message and the PROVIDED USER ROLE to extract intent and entities.
+
+User Roles:
+- admin: High-level command. Focus on revenue, fleet efficiency, and system health.
+- driver: Tactical unit. Focus on mission routes, delivery timing, and coordination.
+- customer: Service user. Focus on order tracking, product discovery, and issue resolution.
 
 Supported Intents:
 - order_status: Checking status of an order. Requires order_id.
-- product_search: Finding products. Requires search_query or category.
+- product_search: Finding products. Requires search_query.
 - recommend_products: Asking for advice or recommendations.
 - refund_request: Asking for a refund. Requires order_id.
+- cancel_order: Asking to cancel an order. Requires order_id (Autonomous action).
 - delivery_eta: Asking when an order will arrive. Requires order_id.
-- sales_summary: (Admin only) Asking for revenue/sales data.
+- sales_summary: Asking for revenue/sales data (Focus for Admin).
+- fleet_status: Asking about drivers/units (Focus for Admin).
 - greeting: General greetings.
 
 Return ONLY a JSON object:
 {
+  "role_context": "perceived_role",
   "intent": "intent_name",
   "entities": {
     "order_id": "123",
-    "search_query": "burger",
-    "category": "food"
+    "search_query": "burger"
   }
 }
 """
 
 class ConversationAgent:
-    async def analyze_query(self, message: str) -> Dict[str, Any]:
+    async def analyze_query(self, message: str, role: str = "customer") -> Dict[str, Any]:
+        prompt = f"USER ROLE: {role}\nUSER MESSAGE: {message}"
         async with httpx.AsyncClient() as client:
             try:
                 response = await client.post(
@@ -48,7 +56,7 @@ class ConversationAgent:
                         "model": XAI_MODEL,
                         "messages": [
                             {"role": "system", "content": SYSTEM_PROMPT},
-                            {"role": "user", "content": message}
+                            {"role": "user", "content": prompt}
                         ],
                         "response_format": {"type": "json_object"}
                     },
@@ -67,19 +75,26 @@ class ConversationAgent:
                 print(f"AI Error: {e}")
                 return {"intent": "general_query", "entities": {}}
 
-    async def generate_response(self, user_query: str, data: Any, intent: str) -> str:
-        prompt = f"""
-        You are QueryNexis Intelligence, a sleek and professional AI system.
-        The user query: "{user_query}"
-        The detected intent was: "{intent}"
-        The relevant data from our systems is: {data}
+    async def generate_response(self, user_query: str, data: Any, intent: str, role: str = "customer") -> str:
+        personas = {
+            "admin": "You are 'Command Intelligence'. Your tone is analytical, strategic, and concise. You provide data-driven insights for business operations.",
+            "driver": "You are 'Tactical Coordination'. Your tone is efficient, direct, and mission-oriented. Focus on logistics and coordination.",
+            "customer": "You are 'QueryNexis Concierge'. Your tone is helpful, empathetic, and professional. Focus on service excellence."
+        }
         
-        Rules:
-        1. Be concise, futuristic, and helpful.
-        2. Use the data provided to answer the user accurately.
-        3. If no products are found, suggest they check back soon for restocks.
-        4. If it's a delivery query, mention the specific status and ETA if available.
-        5. DO NOT mention you are an AI or LLM. Stay in character.
+        system_persona = personas.get(role, personas["customer"])
+        
+        prompt = f"""
+        User Message: "{user_query}"
+        Detected Intent: "{intent}"
+        System Context/Data: {data}
+        
+        Operational Directives:
+        1. Be futuristic and high-tech in your language.
+        2. Use the system context provided to answer accurately.
+        3. If you just performed an action (like canceling an order), confirm it is COMPLETE and successful.
+        4. If the data indicates a delay or issue, apologize professionally and provide the current status.
+        5. DO NOT mention you are an AI or LLM.
         """
         
         async with httpx.AsyncClient() as client:
@@ -94,7 +109,7 @@ class ConversationAgent:
                     json={
                         "model": XAI_MODEL,
                         "messages": [
-                            {"role": "system", "content": "You are a helpful commerce assistant."},
+                            {"role": "system", "content": system_persona},
                             {"role": "user", "content": prompt}
                         ]
                     },
@@ -102,9 +117,9 @@ class ConversationAgent:
                 )
                 
                 if response.status_code != 200:
-                    return f"System error: {response.text}"
+                    return f"Neural link failure: {response.text}"
                 
                 result = response.json()
                 return result["choices"][0]["message"]["content"]
             except Exception as e:
-                return f"I'm having trouble syncing with my core modules right now. Error: {e}"
+                return f"Sync error in intelligence modules: {e}"
