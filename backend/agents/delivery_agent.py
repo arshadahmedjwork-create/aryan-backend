@@ -32,5 +32,5 @@ class DeliveryAgent:
         # Remove '#' if present
         clean_id = short_id.replace("#", "").lower()
         # Search for orders belonging to the user where ID starts with the provided string
-        res = self.supabase.table("orders").select("*, deliveries(*)").eq("user_id", user_id).ilike("id", f"{clean_id}%").execute()
+        res = self.supabase.table("orders").select("*, deliveries(*)").eq("user_id", user_id).filter("id::text", "ilike", f"{clean_id}%").execute()
         return res.data if res.data else []

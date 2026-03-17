@@ -45,7 +45,7 @@ class OrchestratorAgent:
                     response = "I couldn't find any recent orders for you. Could you please provide your order ID?"
         
         elif intent == "cancel_order":
-            order_id = self.extract_order_id(user_query)
+            extracted_id = self.extract_order_id(user_query)
             lower_query = user_query.lower()
             
             # Check for negative response
@@ -70,18 +70,29 @@ class OrchestratorAgent:
                     response = "Understood. Cancellation protocol aborted. How else can I assist you today?"
                     return response
 
-            if not order_id:
+            order_id = None
+            if not extracted_id:
                 # Try to find order id in history if not in query
                 for m in reversed(history):
                     id_in_history = self.extract_order_id(m['content'])
                     if id_in_history:
-                        order_id = id_in_history
+                        extracted_id = id_in_history
                         break
-                
-                # If still no order_id, check for recent order
-                if not order_id:
-                    recent = await self.delivery_agent.get_recent_order(user_id)
-                    order_id = recent["id"] if recent else None
+
+            if not extracted_id:
+                recent = await self.delivery_agent.get_recent_order(user_id)
+                order_id = recent["id"] if recent else None
+            else:
+                if len(extracted_id) < 36:
+                    matches = await self.delivery_agent.search_order_by_id(user_id, extracted_id)
+                    if len(matches) == 1:
+                        order_id = matches[0]["id"]
+                    elif len(matches) > 1:
+                        return f"I found {len(matches)} orders matching that partial ID. Could you be more specific?"
+                    else:
+                        return f"I couldn't find any orders starting with {extracted_id}. Could you double-check the ID?"
+                else:
+                    order_id = extracted_id
             
             if order_id:
                 # 1. Fetch Order Items for confirmation
@@ -129,7 +140,20 @@ class OrchestratorAgent:
                 response = "To initiate termination protocols, I require a specific Order ID. Could you please provide the identification string for the target order?"
 
         elif intent == "refund_request":
-            order_id = self.extract_order_id(user_query)
+            extracted_id = self.extract_order_id(user_query)
+            order_id = None
+            if extracted_id:
+                if len(extracted_id) < 36:
+                    matches = await self.delivery_agent.search_order_by_id(user_id, extracted_id)
+                    if len(matches) == 1:
+                        order_id = matches[0]["id"]
+                    elif len(matches) > 1:
+                        return f"I found {len(matches)} orders matching that partial ID. Could you be more specific?"
+                    else:
+                        return f"I couldn't find any orders starting with {extracted_id}. Could you double-check the ID?"
+                else:
+                    order_id = extracted_id
+
             if order_id:
                 # AUTONOMOUS ACTION: Initiate refund protocol by updating order status
                 self.supabase.table("orders").update({"status": "refunding"}).eq("id", order_id).execute()

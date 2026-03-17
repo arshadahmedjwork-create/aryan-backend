@@ -47,7 +47,8 @@ Note: If the user says "No" when asked for an order ID or confirmation, the inte
 """
 
 class ConversationAgent:
-    async def analyze_query(self, message: str, role: str = "customer", history: list = []) -> Dict[str, Any]:
+    async def analyze_query(self, message: str, role: str = "customer", history: Optional[list] = None) -> Dict[str, Any]:
+        history = history or []
         history_str = "\n".join([f"{m['role']}: {m['content']}" for m in history])
         prompt = f"CONVERSATION HISTORY:\n{history_str}\n\nUSER ROLE: {role}\nUSER MESSAGE: {message}"
         async with httpx.AsyncClient() as client:
