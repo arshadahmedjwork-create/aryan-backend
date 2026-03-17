@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserCheck, Plus, X, ChevronRight, History, Shield, Mail, Lock } from 'lucide-react';
-import api from '../lib/api';
+import api from '@/lib/api';
 
 export default function AdminFleetManager() {
   const [drivers, setDrivers] = useState<any[]>([]);

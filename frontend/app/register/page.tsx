@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Mail, User, ArrowRight, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
-import { useAuth } from '../../lib/auth';
+import { useAuth } from '@/lib/auth';
 import Link from 'next/link';
-import api from '../../lib/api';
+import api from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Mail, ArrowRight, Loader2, Sparkles } from 'lucide-react';
-import { useAuth } from '../../lib/auth';
+import { useAuth } from '@/lib/auth';
 import Link from 'next/link';
 
 export default function LoginPage() {

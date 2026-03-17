@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { X, Upload, Check } from 'lucide-react';
-import api from '../lib/api';
+import api from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminProductForm({ onClose }: { onClose: () => void }) {

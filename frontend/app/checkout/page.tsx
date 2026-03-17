@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard, Truck, ShieldCheck, ArrowRight, Lock, Headphones } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import api from '../../lib/api';
-import { useAuth } from '../../lib/auth';
+import api from '@/lib/api';
+import { useAuth } from '@/lib/auth';
 
 export default function CheckoutPage() {
   const [isFlipped, setIsFlipped] = useState(false);
