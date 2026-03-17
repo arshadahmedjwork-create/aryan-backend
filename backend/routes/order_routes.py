@@ -78,7 +78,7 @@ async def get_order(order_id: str, current_user = Depends(get_current_user), sup
         raise HTTPException(status_code=404, detail="Order not found")
         
     order = res.data[0]
-    if current_user.role != "admin" and str(order["user_id"]) != str(current_user.id):
-        raise HTTPException(status_code=403, detail="Not authorized")
+    if current_user.role not in ["admin", "driver"] and str(order["user_id"]) != str(current_user.id):
+        raise HTTPException(status_code=403, detail="Not authorized for this deployment")
         
     return order

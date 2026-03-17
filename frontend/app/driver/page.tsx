@@ -4,10 +4,12 @@ import { motion } from 'framer-motion';
 import { Truck, MapPin, Package, CheckCircle, Navigation, ExternalLink } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 
 export default function DriverDashboard() {
   const { user } = useAuth();
+  const router = useRouter();
   const [deliveries, setDeliveries] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -91,7 +93,8 @@ export default function DriverDashboard() {
                     key={delivery.id} 
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="p-8 rounded-[2.5rem] glassmorphism border border-white/10 group relative overflow-hidden"
+                    onClick={() => router.push(`/driver/order/${delivery.id}`)}
+                    className="p-8 rounded-[2.5rem] glassmorphism border border-white/10 group relative overflow-hidden cursor-pointer hover:border-blue-500/50 transition-all shadow-xl hover:shadow-blue-500/5"
                   >
                     <div className="absolute top-0 right-0 p-8 opacity-5">
                        <Truck size={120} />
@@ -103,7 +106,10 @@ export default function DriverDashboard() {
                         <p className="text-xs font-black text-white/40 uppercase tracking-[0.2em]">Protocol: {delivery.status}</p>
                       </div>
                       <button 
-                        onClick={() => window.location.href=`/orders/${delivery.order_id}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/orders/${delivery.order_id}`);
+                        }}
                         className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all"
                       >
                         <ExternalLink size={20} />
@@ -127,28 +133,17 @@ export default function DriverDashboard() {
                             </div>
                             <div>
                                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Items</p>
-                               <p className="text-sm font-bold">Encrypted AI Core x1</p>
+                               <p className="text-sm font-bold">Tactical Intelligence Unit</p>
                             </div>
                           </div>
                        </div>
 
-                       <div className="flex flex-col justify-center gap-3">
-                          {delivery.status === 'preparing' && (
-                            <button 
-                              onClick={() => updateStatus(delivery.id, 'out_for_delivery')}
-                              className="w-full py-4 bg-white text-black hover:bg-neutral-200 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-xl shadow-white/5 active:scale-95 transition-all"
-                            >
-                              Commence Delivery
-                            </button>
-                          )}
-                          {delivery.status === 'out_for_delivery' && (
-                            <button 
-                              onClick={() => updateStatus(delivery.id, 'delivered')}
-                              className="w-full py-4 bg-white text-black hover:bg-neutral-200 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-xl shadow-white/10 active:scale-95 transition-all"
-                            >
-                              Mark Delivered
-                            </button>
-                          )}
+                       <div className="flex flex-col justify-center items-end gap-3">
+                          <div className="px-6 py-3 bg-blue-600/10 border border-blue-500/20 rounded-2xl flex items-center gap-3">
+                             <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                             <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">Mission Ready</span>
+                          </div>
+                          <span className="text-[10px] text-white/20 font-bold uppercase tracking-widest">Tap to Enter HUD</span>
                        </div>
                     </div>
                   </motion.div>
