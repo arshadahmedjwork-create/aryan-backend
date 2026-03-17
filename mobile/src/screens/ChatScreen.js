@@ -35,8 +35,13 @@ export default function ChatScreen() {
   }, [user]);
 
   const sendMessage = async (overrideInput = null) => {
-    const messageToSend = overrideInput || input;
-    if (!messageToSend.trim()) return;
+    // Explicitly check for string to support direct calls from chips if needed
+    // But since chips use setInput, we primarily rely on state
+    const messageToSend = (typeof overrideInput === 'string' ? overrideInput : input).trim();
+    if (!messageToSend) {
+      console.log('[CHAT] Empty message, aborting');
+      return;
+    }
 
     const userMsg = { role: 'user', content: messageToSend };
     setMessages(prev => [...prev, userMsg]);
@@ -96,6 +101,7 @@ export default function ChatScreen() {
         renderItem={renderMessage}
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={styles.messageList}
+        keyboardShouldPersistTaps="handled"
         ListFooterComponent={
           !loading && messages.length === 1 ? (
             <View style={styles.quickActions}>
@@ -170,8 +176,9 @@ export default function ChatScreen() {
             />
             <TouchableOpacity 
               style={styles.sendButton}
-              onPress={sendMessage}
+              onPress={() => sendMessage()}
               disabled={loading}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               {loading ? (
                 <ActivityIndicator color="#000" size="small" />
