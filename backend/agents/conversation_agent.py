@@ -11,7 +11,9 @@ XAI_MODEL = os.getenv("XAI_MODEL", "meta-llama/llama-3.3-70b-instruct")
 
 SYSTEM_PROMPT = """
 You are the Intelligence Core for QueryNexis.
-Analyze the user's message and the PROVIDED USER ROLE to extract intent and entities.
+Analyze the user's message, the PROVIDED USER ROLE, and the CONVERSATION HISTORY to extract intent and entities.
+
+CRITICAL: If the user provides a short response like "Yes", "No", "Confirm", or a reason, look at the HISTORY to understand what they are confirming or providing a reason for.
 
 User Roles:
 - admin: High-level command. Focus on revenue, fleet efficiency, and system health.
@@ -19,14 +21,14 @@ User Roles:
 - customer: Service user. Focus on order tracking, product discovery, and issue resolution.
 
 Supported Intents:
-- order_status: Checking status of an order. Requires order_id.
-- product_search: Finding products. Requires search_query.
-- recommend_products: Asking for advice or recommendations.
-- refund_request: Asking for a refund. Requires order_id.
-- cancel_order: Asking to cancel an order. Requires order_id (Autonomous action).
-- delivery_eta: Asking when an order will arrive. Requires order_id.
-- sales_summary: Asking for revenue/sales data (Focus for Admin).
-- fleet_status: Asking about drivers/units (Focus for Admin).
+- order_status: Checking status.
+- product_search: Finding products.
+- recommend_products: Asking for advice.
+- refund_request: Asking for a refund.
+- cancel_order: Asking to cancel an order (Autonomous action).
+- delivery_eta: Asking when an order will arrive.
+- sales_summary: Admin financial request.
+- fleet_status: Admin logic request.
 - greeting: General greetings.
 
 Return ONLY a JSON object:
@@ -36,20 +38,22 @@ Return ONLY a JSON object:
   "entities": {
     "order_id": "123",
     "search_query": "burger"
-  }
+  },
+  "context_relevance": "summary of why this intent was chosen based on history"
 }
 """
 
 class ConversationAgent:
-    async def analyze_query(self, message: str, role: str = "customer") -> Dict[str, Any]:
-        prompt = f"USER ROLE: {role}\nUSER MESSAGE: {message}"
+    async def analyze_query(self, message: str, role: str = "customer", history: list = []) -> Dict[str, Any]:
+        history_str = "\n".join([f"{m['role']}: {m['content']}" for m in history])
+        prompt = f"CONVERSATION HISTORY:\n{history_str}\n\nUSER ROLE: {role}\nUSER MESSAGE: {message}"
         async with httpx.AsyncClient() as client:
             try:
                 response = await client.post(
                     f"{XAI_BASE_URL}/chat/completions",
                     headers={
                         "Authorization": f"Bearer {XAI_API_KEY}",
-                        "HTTP-Referer": "http://localhost:3000",
+                        "HTTP-Referer": os.getenv("FRONTEND_URL", "http://localhost:3000"),
                         "X-Title": "QueryNexis Intelligence"
                     },
                     json={
@@ -106,7 +110,7 @@ class ConversationAgent:
                     f"{XAI_BASE_URL}/chat/completions",
                     headers={
                         "Authorization": f"Bearer {XAI_API_KEY}",
-                        "HTTP-Referer": "http://localhost:3000",
+                        "HTTP-Referer": os.getenv("FRONTEND_URL", "http://localhost:3000"),
                         "X-Title": "QueryNexis Intelligence"
                     },
                     json={

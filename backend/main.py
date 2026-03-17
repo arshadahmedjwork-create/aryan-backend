@@ -21,6 +21,7 @@ import os
 
 allowed_origins = [
     "http://localhost:3000",
+    "https://commerce-companion-frontend.vercel.app", # Potential production URL
     os.getenv("FRONTEND_URL", "")
 ]
 
@@ -58,11 +59,24 @@ async def chat(request: ChatRequest, current_user = Depends(get_current_user), s
             "content": request.message
         }).execute()
         
-        # 2. Analyze User Query (Role-Aware)
-        analysis = await conv_agent.analyze_query(request.message, current_user.role)
+        # 2. Fetch Recent History (for context)
+        history_res = supabase.table("messages")\
+            .select("role, content")\
+            .eq("user_id", str(current_user.id))\
+            .order("created_at", desc=True)\
+            .limit(6)\
+            .execute()
+        
+        # Reverse to get chronological order and exclude the current message just logged if needed
+        # but analyze_query needs to see what was just said too. 
+        # Actually, let's just pass the 5 previous messages.
+        history = history_res.data[1:][::-1] # Exclude latest (which is request.message) and reverse
+        
+        # 3. Analyze User Query (Role-Aware & Context-Aware)
+        analysis = await conv_agent.analyze_query(request.message, current_user.role, history)
         intent = analysis.get("intent", "general_query")
         
-        # 3. Orchestrate Response (Role-Aware)
+        # 4. Orchestrate Response (Role-Aware)
         response_text = await orchestrator.handle_request(
             request.message, 
             intent, 
