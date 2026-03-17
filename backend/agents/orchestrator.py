@@ -55,11 +55,14 @@ class OrchestratorAgent:
                 items_res = self.supabase.table("order_items").select("products(name), quantity").eq("order_id", order_id).execute()
                 items_list = [f"{item['products']['name']} x{item['quantity']}" for item in items_res.data]
                 
-                # 2. Check if this is a confirmation step (user likely provided a reason)
-                # We interpret the presence of a message without a new intent as the reason
+                # 2. Check if this is a confirmation step
                 reason = self.extract_reason(user_query)
                 
-                if reason and ("confirm" in user_query.lower() or "yes" in user_query.lower() or "proceed" in user_query.lower()):
+                # Check for explicit confirmation words or reiteration of cancellation
+                confirmation_signals = ["confirm", "yes", "proceed", "ok", "sure", "yep", "do it", "cancel it", "please cancel", "cancel that"]
+                is_confirming = any(sig in user_query.lower() for sig in confirmation_signals)
+                
+                if is_confirming:
                     # AUTONOMOUS ACTION: Update order status to cancelled with reason
                     self.supabase.table("orders").update({
                         "status": "cancelled",
@@ -149,8 +152,11 @@ class OrchestratorAgent:
 
     def extract_reason(self, query: str):
         # A simple heuristic: if a user is confirming and providing text, that text is the reason
-        # We strip out common confirmation words
-        confirmation_keywords = ["yes", "confirm", "proceed", "cancel", "order", "my", "please", "i", "want", "to"]
+        # We strip out common confirmation and filler words
+        confirmation_keywords = [
+            "yes", "confirm", "proceed", "cancel", "order", "my", "please", 
+            "i", "want", "to", "that", "this", "it", "now", "ok", "sure", "yep"
+        ]
         words = query.lower().split()
         reason_words = [w for w in words if w not in confirmation_keywords and len(w) > 2]
         

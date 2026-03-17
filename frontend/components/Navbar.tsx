@@ -15,7 +15,7 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 glassmorphism px-8 py-4 flex justify-between items-center border-b border-border">
       <Link href="/" className="flex items-center">
-        <img src="/logo.png" alt="QueryNexis" className="h-10 w-auto" />
+        <img src="/logo.png" alt="QueryNexis" className="h-14 w-auto" />
       </Link>
       
       <div className="flex gap-8 items-center text-sm font-medium">

@@ -8,7 +8,8 @@ import api from '@/lib/api';
 import { useAuth } from '@/lib/auth';
 
 export default function CheckoutPage() {
-  const [step, setStep] = useState(1);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [cvv, setCvv] = useState('');
   const [loading, setLoading] = useState(false);
   const { cart, clearCart, user } = useAuth();
   const router = useRouter();
@@ -21,21 +22,17 @@ export default function CheckoutPage() {
     if (cart.length === 0) return;
     setLoading(true);
     try {
-      // Create actual order in Supabase
       const orderItems = cart.map((item: any) => ({
         product_id: item.id,
         quantity: item.qty,
         price: item.price
       }));
       
-      const res = await api.post('/orders/', { items: orderItems });
-      
-      // Clear cart on success
+      await api.post('/orders/', { items: orderItems });
       clearCart();
       router.push('/order-success');
     } catch (err) {
       console.error("Checkout failed:", err);
-      // Fallback for demo if backend is finicky, but ideally show error
       setLoading(false);
     }
   };
@@ -58,117 +55,120 @@ export default function CheckoutPage() {
             Secure Checkout
           </h1>
           <p className="text-white/40 font-medium text-sm md:text-base max-w-md mx-auto leading-relaxed">
-            Complete your order for the Nexis Intelligence Suite. Your data is encrypted and secure.
+            Finalize your intelligence acquisition. Tactical encryption active.
           </p>
         </div>
 
-        {/* Checkout Card */}
-        <div className="bg-[#0A0A0A] rounded-[48px] border border-white/[0.05] p-8 md:p-12 shadow-2xl overflow-hidden relative">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
-          
-          <div className="space-y-16">
-            {/* Shipping Details */}
-            <section>
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-10 h-10 bg-[#2563EB]/10 rounded-xl flex items-center justify-center text-[#2563EB]">
-                  <Truck size={24} />
-                </div>
-                <h2 className="text-2xl font-black text-white tracking-tight">Shipping Details</h2>
-              </div>
-
-              <div className="grid gap-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">Full Name</label>
-                  <input 
-                    type="text" 
-                    placeholder="John Doe" 
-                    defaultValue={user?.full_name || ''} 
-                    className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">Email Address</label>
-                  <input 
-                    type="email" 
-                    placeholder="john@querynexis.com" 
-                    defaultValue={user?.email || ''} 
-                    className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">Street Address</label>
-                  <input 
-                    type="text" 
-                    placeholder="123 Analytics Way" 
-                    className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium"
-                  />
-                </div>
-                <div className="space-y-2">
-                   <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">City</label>
-                   <input 
-                     type="text" 
-                     placeholder="San Francisco" 
-                     className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium"
-                   />
-                </div>
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">State</label>
-                    <input type="text" placeholder="CA" className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium" />
+        {/* Tactical Payment Module */}
+        <div className="space-y-12">
+          {/* Animated Card Section */}
+          <div className="perspective-1000 h-64 w-full max-w-md mx-auto relative">
+            <motion.div 
+              className="w-full h-full relative"
+              initial={false}
+              animate={{ rotateY: isFlipped ? 180 : 0 }}
+              transition={{ duration: 0.8, type: "spring", stiffness: 100, damping: 20 }}
+              style={{ transformStyle: 'preserve-3d' }}
+            >
+              {/* Front of Card */}
+              <div 
+                className="absolute inset-0 w-full h-full rounded-[32px] bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A] border border-white/10 p-8 flex flex-col justify-between shadow-2xl backface-hidden"
+              >
+                <div className="flex justify-between items-start">
+                  <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
+                    <CreditCard className="text-[#2563EB]" />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-4">ZIP</label>
-                    <input type="text" placeholder="94103" className="w-full bg-[#050505] border border-white/5 rounded-2xl p-5 text-white placeholder:text-white/10 outline-none focus:border-white/20 transition-all font-medium" />
-                  </div>
+                  <span className="text-[10px] font-black text-white/20 tracking-widest uppercase italic">QueryNexis Core</span>
+                </div>
+                <div>
+                   <p className="text-lg font-mono text-white tracking-[0.2em] mb-4">•••• •••• •••• 9921</p>
+                   <div className="flex justify-between items-end">
+                      <div>
+                         <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Holder</p>
+                         <p className="text-xs font-bold text-white uppercase tracking-wider">{user?.full_name || "Nexus Unit"}</p>
+                      </div>
+                      <div className="text-right">
+                         <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Expiry</p>
+                         <p className="text-xs font-bold text-white uppercase tracking-wider">12 / 29</p>
+                      </div>
+                   </div>
                 </div>
               </div>
-            </section>
 
-            {/* Order Summary */}
-            <section>
-              <div className="flex items-center justify-between mb-8">
-                 <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500">
-                       <CreditCard size={24} />
-                    </div>
-                    <h2 className="text-2xl font-black text-white tracking-tight">Order Summary</h2>
-                 </div>
-                 <span className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase">INR</span>
+              {/* Back of Card */}
+              <div 
+                className="absolute inset-0 w-full h-full rounded-[32px] bg-gradient-to-br from-[#0A0A0A] to-[#1A1A1A] border border-white/10 p-8 flex flex-col justify-center shadow-2xl backface-hidden"
+                style={{ transform: 'rotateY(180deg)', backfaceVisibility: 'hidden' }}
+              >
+                <div className="h-10 w-full bg-white/5 mb-8 rounded-lg" />
+                <div className="flex flex-col items-center gap-4">
+                   <div className="w-32">
+                      <label className="text-[10px] font-black text-white/40 uppercase tracking-widest block text-center mb-2">Security CVV</label>
+                      <input 
+                        type="text" 
+                        maxLength={3}
+                        placeholder="•••"
+                        value={cvv}
+                        onChange={(e) => setCvv(e.target.value)}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-center text-white font-mono text-xl tracking-widest outline-none focus:border-[#2563EB] transition-colors"
+                      />
+                   </div>
+                   <p className="text-[9px] text-white/20 font-medium uppercase text-center italic">Verified by Neural Shield v4.0</p>
+                </div>
               </div>
+            </motion.div>
+          </div>
 
-              <div className="bg-[#050505] rounded-[32px] border border-white/5 p-8 space-y-6">
-                 {cart.map((item: any) => (
-                    <div key={item.id} className="flex justify-between items-center text-sm">
-                       <span className="text-white/60 font-medium">{item.name} Unit x{item.qty}</span>
+          <div className="bg-[#0A0A0A] rounded-[48px] border border-white/[0.05] p-8 md:p-12 shadow-2xl relative">
+            <div className="space-y-12">
+               {/* Order Summary Module */}
+               <div className="bg-[#050505] rounded-[32px] border border-white/5 p-8 space-y-4">
+                  <div className="flex items-center gap-3 mb-2">
+                     <Lock size={14} className="text-blue-500" />
+                     <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Synchronized Intelligence Order</span>
+                  </div>
+                  {cart.map((item: any) => (
+                    <div key={item.id} className="flex justify-between items-center text-xs">
+                       <span className="text-white/60 font-medium">{item.name} x{item.qty}</span>
                        <span className="font-bold text-white">₹{(item.price * item.qty).toLocaleString()}</span>
                     </div>
-                 ))}
-                 <div className="flex justify-between items-center text-sm">
-                    <span className="text-white/60 font-medium">Shipping Protocol</span>
-                    <span className="text-[10px] font-black text-[#22C55E] tracking-widest uppercase">Complimentary</span>
-                 </div>
-                 <div className="pt-6 border-t border-white/5 flex justify-between items-center">
-                    <span className="text-xl font-bold text-white tracking-tight">Total Amount</span>
-                    <span className="text-4xl font-black text-white tracking-tighter italic">₹{total.toLocaleString()}</span>
-                 </div>
-              </div>
-            </section>
+                  ))}
+                  <div className="pt-4 border-t border-white/5 flex justify-between items-center">
+                     <span className="text-lg font-bold text-white tracking-tight">Total</span>
+                     <span className="text-3xl font-black text-white tracking-tighter italic">₹{total.toLocaleString()}</span>
+                  </div>
+               </div>
 
-            {/* CTA */}
-            <div className="space-y-8">
-              <button 
-                onClick={handleCheckout}
-                disabled={loading}
-                className="w-full py-6 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-black rounded-[28px] flex items-center justify-center gap-4 transition-all active:scale-95 shadow-2xl shadow-blue-600/20 group disabled:opacity-50"
-              >
-                <span className="text-lg tracking-[0.1em] uppercase">{loading ? "Synchronizing..." : "Complete Order"}</span>
-                {!loading && <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />}
-              </button>
+               {/* Smart Action Button */}
+               {!isFlipped ? (
+                 <button 
+                   onClick={() => setIsFlipped(true)}
+                   className="w-full py-6 bg-white text-black font-black rounded-[28px] flex items-center justify-center gap-4 transition-all active:scale-95 shadow-2xl group"
+                 >
+                   <span className="text-lg tracking-[0.1em] uppercase italics">Pay ₹{total.toLocaleString()}</span>
+                   <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
+                 </button>
+               ) : (
+                 <button 
+                   onClick={handleCheckout}
+                   disabled={loading || cvv.length < 3}
+                   className="w-full py-6 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-black rounded-[28px] flex items-center justify-center gap-4 transition-all active:scale-95 shadow-2xl shadow-blue-600/20 group disabled:opacity-50"
+                 >
+                   <span className="text-lg tracking-[0.1em] uppercase">{loading ? "Executing..." : "Confirm Tactical Pay"}</span>
+                   {!loading && <ShieldCheck size={24} className="group-hover:scale-110 transition-transform" /> }
+                 </button>
+               )}
 
-              <div className="flex items-center justify-center gap-3 text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">
-                 <Lock size={14} fill="currentColor" />
-                 <span>Encrypted 256-bit AES Connection</span>
-              </div>
+               <div className="flex items-center justify-center gap-6 text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">
+                  <div className="flex items-center gap-2">
+                     <Lock size={12} />
+                     <span>SECURE CORE</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                     <ShieldCheck size={12} />
+                     <span>VETTED</span>
+                  </div>
+               </div>
             </div>
           </div>
         </div>

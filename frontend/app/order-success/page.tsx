@@ -1,48 +1,68 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { CheckCircle, ArrowRight, Package, Home } from 'lucide-react';
+import { CheckCircle, Package, ArrowRight, Truck } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function OrderSuccessPage() {
+  const router = useRouter();
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-8">
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="max-w-lg w-full p-12 rounded-[3.5rem] glassmorphism border border-white/20 text-center relative overflow-hidden"
-      >
-        <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 blur-3xl rounded-full" />
-        
-        <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-8 text-white border border-white/20">
-          <CheckCircle size={56} />
+    <div className="min-h-screen bg-[#000000] flex items-center justify-center px-6">
+      <div className="max-w-md w-full text-center">
+        {/* Success Icon Animation */}
+        <motion.div 
+          initial={{ scale: 0, rotate: -45 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", damping: 12, stiffness: 200 }}
+          className="w-32 h-32 bg-green-500/10 border border-green-500/20 rounded-[40px] flex items-center justify-center mx-auto mb-12 shadow-[0_0_80px_rgba(34,197,94,0.15)]"
+        >
+          <CheckCircle size={64} className="text-green-500" />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h1 className="text-4xl font-black text-white mb-6 tracking-tight uppercase italic">
+            Mission Successful
+          </h1>
+          <p className="text-white/40 font-medium mb-12 leading-relaxed">
+            Your intelligence units have been deployed. Tactical tracking is now active. You will receive a notification when the fleet arrives at your coordinates.
+          </p>
+
+          <div className="grid gap-4">
+            <button 
+              onClick={() => router.push('/orders')}
+              className="w-full py-5 bg-white text-black font-black rounded-2xl flex items-center justify-center gap-3 hover:bg-neutral-200 transition-all active:scale-95 uppercase tracking-widest text-sm"
+            >
+              <Truck size={18} />
+              Track Fleet
+            </button>
+            <Link 
+              href="/"
+              className="w-full py-5 bg-white/5 border border-white/10 text-white font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition-all active:scale-95 uppercase tracking-widest text-[10px]"
+            >
+              Return to Intelligence Core
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* Tactical Footer */}
+        <div className="mt-20 pt-8 border-t border-white/5 flex justify-center gap-8 opacity-20">
+           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white">
+              <Package size={12} />
+              <span>Packaged</span>
+           </div>
+           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white">
+              <Truck size={12} />
+              <span>Routed</span>
+           </div>
         </div>
-        
-        <h1 className="text-4xl font-black mb-4">Success!</h1>
-        <p className="text-muted-foreground mb-12">
-          Your autonomous order has been placed successfully. Our delivery bots are already in motion.
-        </p>
-        
-        <div className="space-y-4">
-          <Link 
-            href="/orders" 
-            className="w-full py-4 bg-white text-black font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-neutral-200 transition-all shadow-xl shadow-white/5"
-          >
-            Track Order <Package size={20} />
-          </Link>
-          
-          <Link 
-            href="/" 
-            className="w-full py-4 bg-white/5 border border-white/10 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-white/10 transition-all"
-          >
-            Back to Home <Home size={20} />
-          </Link>
-        </div>
-        
-        <p className="text-[10px] uppercase tracking-[0.2em] font-black text-white/20 mt-12 italic">
-          QueryNexis Architecture
-        </p>
-      </motion.div>
+      </div>
     </div>
   );
 }
