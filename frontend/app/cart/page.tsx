@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, X, Plus, Minus, Zap, Search, Truck, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth } from '@/lib/auth';
+import { useAuth } from '../../lib/auth';
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQty } = useAuth();

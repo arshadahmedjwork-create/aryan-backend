@@ -3,9 +3,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
-import api from '@/lib/api';
+import api from '../lib/api';
 
-import { useAuth } from '@/lib/auth';
+import { useAuth } from '../lib/auth';
 
 export default function AIChat() {
   const { user } = useAuth();

@@ -2,10 +2,10 @@
 
 import { motion } from 'framer-motion';
 import { Truck, MapPin, Package, CheckCircle, Navigation, ExternalLink } from 'lucide-react';
-import { useAuth } from '@/lib/auth';
+import { useAuth } from '../../lib/auth';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
+import api from '../../lib/api';
 
 export default function DriverDashboard() {
   const { user } = useAuth();

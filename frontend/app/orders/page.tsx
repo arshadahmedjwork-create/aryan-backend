@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Package, ChevronRight, Clock, CheckCircle, Truck } from 'lucide-react';
 import Link from 'next/link';
-import api from '@/lib/api';
-import { useAuth } from '@/lib/auth';
+import api from '../../lib/api';
+import { useAuth } from '../../lib/auth';
 
 export default function OrderHistoryPage() {
   const [orders, setOrders] = useState<any[]>([]);

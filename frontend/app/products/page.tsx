@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Filter, X, ChevronRight, Check } from 'lucide-react';
-import api from '@/lib/api';
-import { useAuth } from '@/lib/auth';
+import api from '../../lib/api';
+import { useAuth } from '../../lib/auth';
 
 interface Product {
   id: string;

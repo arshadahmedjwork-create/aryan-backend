@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Brain, AlertTriangle, Info } from 'lucide-react';
-import api from '@/lib/api';
-import { useAuth } from '@/lib/auth';
+import api from '../lib/api';
+import { useAuth } from '../lib/auth';
 
 export default function AIAgentPulse() {
   const { user } = useAuth();

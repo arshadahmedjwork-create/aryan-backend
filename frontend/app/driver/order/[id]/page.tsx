@@ -14,9 +14,9 @@ import {
   Box
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/lib/auth';
+import { useAuth } from '../../../../lib/auth';
 import { useParams, useRouter } from 'next/navigation';
-import api from '@/lib/api';
+import api from '../../../../lib/api';
 
 export default function DriverHUD() {
   const { user } = useAuth();

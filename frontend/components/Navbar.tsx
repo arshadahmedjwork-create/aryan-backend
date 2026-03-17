@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ShoppingCart, User, LogOut, Menu } from 'lucide-react';
-import { useAuth } from '@/lib/auth';
+import { useAuth } from '../lib/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 

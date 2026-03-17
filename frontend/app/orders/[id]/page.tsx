@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import { Truck, MapPin, Package, Clock, CheckCircle, ArrowLeft } from 'lucide-react';
-import api from '@/lib/api';
+import api from '../../../lib/api';
 
 export default function OrderTrackingPage() {
   const { id } = useParams();

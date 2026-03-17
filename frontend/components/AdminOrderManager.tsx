@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Truck, CheckCircle, Clock, ChevronRight, User } from 'lucide-react';
-import api from '@/lib/api';
+import api from '../lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminOrderManager() {
