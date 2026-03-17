@@ -2,12 +2,12 @@
 
 import { motion } from 'framer-motion';
 import { Package, Truck, BarChart3, Plus, Search, UserCheck, Users, Zap } from 'lucide-react';
-import { useAuth } from '@/lib/auth';
+import { useAuth } from '../../lib/auth';
 import { useState, useEffect } from 'react';
-import api from '@/lib/api';
-import AdminProductForm from '@/components/AdminProductForm';
-import AdminOrderManager from '@/components/AdminOrderManager';
-import AdminFleetManager from '@/components/AdminFleetManager';
+import api from '../../lib/api';
+import AdminProductForm from '../../components/AdminProductForm';
+import AdminOrderManager from '../../components/AdminOrderManager';
+import AdminFleetManager from '../../components/AdminFleetManager';
 
 export default function AdminDashboard() {
   const { user } = useAuth();
