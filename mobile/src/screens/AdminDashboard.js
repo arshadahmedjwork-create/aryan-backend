@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator, FlatList, Modal, Animated, Image, TextInput } from 'react-native';
 import { useAuth } from '../context/AuthContext';
-import { Command, Truck, Package, BarChart3, ChevronRight, UserCheck, Plus, X } from 'lucide-react-native';
+import { Command, Truck, Package, BarChart3, ChevronRight, UserCheck, Plus, X, Eye, EyeOff } from 'lucide-react-native';
 import axios from 'axios';
 import AIAgentPulse from '../components/AIAgentPulse';
 
@@ -17,6 +17,7 @@ export default function AdminDashboard() {
   const [selectedDriver, setSelectedDriver] = useState(null);
   const [driverMissions, setDriverMissions] = useState([]);
   const [newUnit, setNewUnit] = useState({ name: '', email: '', password: '' });
+  const [showNewUnitPassword, setShowNewUnitPassword] = useState(false);
   const [activeDeliveries, setActiveDeliveries] = useState([]);
   
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -248,7 +249,19 @@ export default function AdminDashboard() {
             <View style={styles.addUnitForm}>
               <TextInput style={styles.modalInput} placeholder="UNIT NAME" placeholderTextColor="#444" value={newUnit.name} onChangeText={t => setNewUnit(prev => ({ ...prev, name: t }))} />
               <TextInput style={styles.modalInput} placeholder="EMAIL PROTOCOL" placeholderTextColor="#444" value={newUnit.email} onChangeText={t => setNewUnit(prev => ({ ...prev, email: t }))} autoCapitalize="none" />
-              <TextInput style={styles.modalInput} placeholder="ENCRYPTION KEY" placeholderTextColor="#444" value={newUnit.password} onChangeText={t => setNewUnit(prev => ({ ...prev, password: t }))} secureTextEntry />
+              <View style={styles.passwordInputWrapper}>
+                <TextInput 
+                  style={styles.modalInputFlex} 
+                  placeholder="ENCRYPTION KEY" 
+                  placeholderTextColor="#444" 
+                  value={newUnit.password} 
+                  onChangeText={t => setNewUnit(prev => ({ ...prev, password: t }))} 
+                  secureTextEntry={!showNewUnitPassword} 
+                />
+                <TouchableOpacity onPress={() => setShowNewUnitPassword(!showNewUnitPassword)} style={styles.modalEye}>
+                  {showNewUnitPassword ? <EyeOff color="#AAA" size={20} /> : <Eye color="#AAA" size={20} />}
+                </TouchableOpacity>
+              </View>
               <TouchableOpacity style={styles.modalButton} onPress={registerUnit}>
                 <Text style={styles.modalButtonText}>AUTHORIZE UNIT</Text>
               </TouchableOpacity>
@@ -358,6 +371,25 @@ const styles = StyleSheet.create({
   modalContent: { backgroundColor: '#111', borderTopLeftRadius: 32, borderTopRightRadius: 32, padding: 24, maxHeight: '80%', borderWidth: 1, borderColor: '#222' },
   addUnitForm: { gap: 16, marginBottom: 20 },
   modalInput: { backgroundColor: '#000', height: 56, borderRadius: 16, paddingHorizontal: 16, color: '#FFF', fontSize: 14, fontWeight: '600', borderWidth: 1, borderColor: '#222' },
+  passwordInputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#000',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#222',
+  },
+  modalInputFlex: {
+    flex: 1,
+    height: 56,
+    paddingHorizontal: 16,
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  modalEye: {
+    padding: 16,
+  },
   modalButton: { backgroundColor: '#FFF', height: 56, borderRadius: 16, alignItems: 'center', justifyContent: 'center', marginTop: 8 },
   modalButtonText: { color: '#000', fontSize: 14, fontWeight: '900', letterSpacing: 1 },
   modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },

@@ -60,8 +60,8 @@ class OrchestratorAgent:
         elif intent == "refund_request":
             order_id = self.extract_order_id(user_query)
             if order_id:
-                # AUTONOMOUS ACTION: Initiate refund protocol
-                self.supabase.table("orders").update({"payment_status": "refunding", "status": "refunding"}).eq("id", order_id).execute()
+                # AUTONOMOUS ACTION: Initiate refund protocol by updating order status
+                self.supabase.table("orders").update({"status": "refunding"}).eq("id", order_id).execute()
                 response = await self.conv_agent.generate_response(user_query, {"order_id": order_id, "action": "refund_initiated"}, intent, role)
             else:
                 response = "Please provide the Order ID for the refund request so I can initiate the protocol."

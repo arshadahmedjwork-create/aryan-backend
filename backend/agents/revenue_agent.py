@@ -9,13 +9,14 @@ class RevenueAnalyticsAgent:
         # Supabase SDK filter: .gte("created_at", date)
         today = datetime.utcnow().date().isoformat()
         
-        res = self.supabase.table("orders").select("total_price").eq("payment_status", "completed").gte("created_at", today).execute()
+        # Use 'status' column since 'payment_status' might not exist in production
+        res = self.supabase.table("orders").select("total_price").in_("status", ["paid", "shipped", "delivered"]).gte("created_at", today).execute()
         
         daily_total = float(sum(o["total_price"] for o in res.data))
         
         # Weekly summary (last 7 days)
         last_week = (datetime.utcnow() - timedelta(days=7)).date().isoformat()
-        res_week = self.supabase.table("orders").select("total_price").eq("payment_status", "completed").gte("created_at", last_week).execute()
+        res_week = self.supabase.table("orders").select("total_price").in_("status", ["paid", "shipped", "delivered"]).gte("created_at", last_week).execute()
         
         weekly_total = float(sum(o["total_price"] for o in res_week.data))
         

@@ -11,11 +11,12 @@ import {
   Image
 } from 'react-native';
 import { useAuth } from '../context/AuthContext';
-import { Mail, Lock, ArrowRight, Sparkles } from 'lucide-react-native';
+import { Mail, Lock, ArrowRight, Sparkles, Eye, EyeOff } from 'lucide-react-native';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { login } = useAuth();
@@ -82,8 +83,18 @@ export default function LoginScreen() {
               placeholderTextColor="#444"
               value={password}
               onChangeText={setPassword}
-              secureTextEntry
+              secureTextEntry={!showPassword}
             />
+            <TouchableOpacity 
+              onPress={() => setShowPassword(!showPassword)}
+              style={styles.eyeIcon}
+            >
+              {showPassword ? (
+                <EyeOff color="#666" size={18} />
+              ) : (
+                <Eye color="#666" size={18} />
+              )}
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -176,6 +187,9 @@ const styles = StyleSheet.create({
     height: 56,
     color: '#FFF',
     fontSize: 16,
+  },
+  eyeIcon: {
+    padding: 10,
   },
   button: {
     backgroundColor: '#FFF',
