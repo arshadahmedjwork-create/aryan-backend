@@ -79,12 +79,13 @@ async def chat(request: ChatRequest, current_user = Depends(get_current_user), s
         
         return {"response": response_text, "intent": intent}
     except Exception as e:
-        print(f"[CRITICAL FAIL] Intelligence Sync Error: {e}")
         import traceback
-        traceback.print_exc()
+        error_detail = traceback.format_exc()
+        print(f"[CRITICAL FAIL] Intelligence Sync Error: {error_detail}")
         return {
-            "response": "QueryNexis Intelligence is recalibrating tactical protocols. Neural link lost. Please retry.",
-            "intent": "error"
+            "response": f"Neural link failure: {str(e)}",
+            "intent": "error",
+            "debug": error_detail
         }
 
 @app.get("/ai/pulse")
